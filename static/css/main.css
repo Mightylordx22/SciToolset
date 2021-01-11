@@ -96,3 +96,11 @@
 .auth-divider {
     width: 100%;
 }
+
+#index-body {
+    background-color: dimgray;
+}
+
+.disable-click {
+    pointer-events: none
+}
