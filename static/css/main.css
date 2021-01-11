@@ -10,7 +10,7 @@
 
 .main-content {
     height: 100vh;
-    background-image: linear-gradient(to right, #e78200, black) !important;
+    background-image: linear-gradient(135deg, #0A547F, #0A7F3F);
     /*Use #0A547F for gradient cause I think it looks nicer*/
     background-size: 400% 400%;
     animation: gradient 10s ease infinite;
@@ -41,6 +41,7 @@
 
 .card-body {
     padding: 1rem;
+    font-family: "Comfortaa", sans-serif;
 }
 
 .form-input {
@@ -61,8 +62,13 @@
     transition: .25s ease-in-out;
 }
 
-.btn, .btn:hover, .form-input input[type="email"]:focus, .form-input input[type="password"]:focus {
+.btn:hover {
+    background-color: #0C5131 !important;
+}
+
+.btn, .btn:hover, .form-input input[type="email"]:focus, .form-input input[type="password"]:focus, .form-input input[type="text"]:focus {
     transform: scalex(1.02);
+    border-color: #0C5131;
     transition: .25s ease-in-out;
 }
 
@@ -87,4 +93,8 @@
 
 .left {
     text-align: left;
+}
+
+.auth-divider {
+    width: 100%;
 }
