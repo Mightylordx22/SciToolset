@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask, render_template, request, redirect, url_for, session
-from functions import get_bearer_code
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
@@ -28,14 +27,6 @@ def login_page():
                 message = "Admin account"
             else:
                 message = "Normal Account"
-            # if email != "mightylordx786@gmail.com":
-            #     session['logged_in'] = True
-            #     session['bearer_code'] = get_bearer_code()
-            # else:
-            #     session['logged_in'] = True
-            #     session['bearer_code'] = get_bearer_code()
-            #     session['admin'] = True
-            #     return redirect(url_for('home_page'))
     except Exception as e:
         message = "Wrong Email or Password try again"
         print(e)
