@@ -19,11 +19,13 @@ def contact_page():
 
 @app.route('/login', methods=["GET", "POST"])
 def login_page():
-    message = "none"
+    message = "non"
     try:
         if request.method == "POST":
             email = request.form.get("emailInput").strip()
             password = request.form.get("passwordInput").strip()
+            print(email)
+            print(password)
             if email != "mightylordx786@gmail.com":
                 session['logged_in'] = True
                 session['bearer_code'] = get_bearer_code()
@@ -36,6 +38,11 @@ def login_page():
         message = "Wrong Email or Password try again"
         print(e)
     return render_template("login.html", message=message)
+
+
+@app.route('/register', methods=["GET", "POST"])
+def register_page():
+    return "hi"
 
 
 @app.route('/logout')
