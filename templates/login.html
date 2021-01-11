@@ -6,27 +6,30 @@
     {% include 'includes/links.html' %}
 </head>
 <body>
-{% include 'includes/header.html' %}
-<main>
-    <div class="container">
-        <h1>Login</h1>
-        <form method="post">
-            <div class="form-group">
-                <label for="emailInput">Email address</label>
-                <input type="email" class="form-control" name="emailInput" aria-describedby="emailHelp"
-                       placeholder="Enter email" required>
+    <main class="main-content">
+        <div class="container">
+            <div class="row px-3">
+                <div class="col-lg-9 col-xl-6 card flex-row mx-auto px-0">
+                    <div class="card-body">
+                        <img src="{{ url_for('static',filename='resources/Sci-Toolset.png') }}" alt="Sci-Toolset logo"
+                             class="img-fluid mx-auto d-block">
+                        <form method="POST" class="form-box px-3 centred">
+                            <div class="form-input">
+                                <input type="email" name="emailInput" placeholder="Email Address" tabindex="10" required>
+                                <input type="password" name="passwordInput" placeholder="Password" required>
+                            </div>
+                            <p class="left">Don't have an account click <a href="{{ url_for('register_page') }}" class="register-link">here</a></p>
+                            {% if message != "none" %}
+                                <p class="error-message">{{ error }}</p>
+                            {% endif %}
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-success">Login</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="passwordInput">Password</label>
-                <input type="password" class="form-control" name="passwordInput" placeholder="Password" required>
-            </div>
-            {% if message != "none" %}
-                <p class="text-danger">{{ message }}</p>
-            {% endif %}
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-    </div>
-</main>
-{% include 'includes/footer.html' %}
+        </div>
+    </main>
 </body>
 </html>
