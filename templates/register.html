@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    {% include 'includes/links.html' %}
+</head>
+<body>
+<main class="main-content">
+    <div class="container">
+        <div class="row px-3">
+            <div class="col-lg-9 col-xl-6 card flex-row mx-auto px-0">
+                <div class="card-body centred">
+                    <img src="{{ url_for('static',filename='resources/Sci-Toolset.png') }}" alt="Sci-Toolset logo"
+                         class="img-fluid mx-auto d-block">
+                    <form action="" class="form-box px-3">
+                        <div class="form-input">
+                            <input class="form-input" type="email" name="" placeholder="Email Address" tabindex="10"
+                                   required>
+                            <input type="password" name="" placeholder="Password" required>
+                            <input type="text" name="" placeholder="Unique Code" required>
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-success">register</button>
+                            <hr>
+                            <p>Already have an account <a href="{{ url_for('login_page') }}"
+                                                          class="register-link">Login</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

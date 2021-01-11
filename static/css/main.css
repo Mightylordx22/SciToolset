@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Comfortaa|Manjari|Montserrat|Roboto&display=swap);
+
 * {
     margin: 0;
     padding: 0;
@@ -5,80 +7,100 @@
     box-sizing: border-box
 }
 
-.container {
-    width: 95%;
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto
-}
-
-header {
-    min-height: 3vh;
+.main-content {
+    height: 100vh;
+    background-image: linear-gradient(135deg, #0A547F, #0A7F3F);
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite;
     display: flex;
-    justify-content: flex-end;
-    align-items: center
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-#nav {
-    display: flex;
-    font-size: 1.15rem;
-    margin: 20px
+@keyframes gradient {
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
 }
 
-#nav a {
-    text-decoration: none;
-    transition: 0.25s
+.card {
+    overflow: hidden;
+    border: 0 !important;
+    border-radius: 20px !important;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
 }
 
-#nav a::after {
-    content: "";
-    display: block;
-    width: 0;
-    height: 2px;
-    background: #bababa;
-    transition: width .3s
+.card-body {
+    padding: 1rem;
+    font-family: "Comfortaa", sans-serif;
 }
 
-#nav a:hover {
-    color: #edf0f1;
-    transition: 0.25s
+.form-input {
+    position: relative;
 }
 
-#nav a:hover::after {
+.form-input input {
     width: 100%;
-    transition: width .3s
+    height: 45px;
+    padding-left: 10px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    box-shadow: none;
+    border: 2px solid #00000020;
+    border-radius: 50px;
+    outline: none;
+    background: transparent;
+    transition: .25s ease-in-out;
 }
 
-.nav-item {
-    list-style: none;
-    display: flex;
-    padding-left: 1rem
+.btn, .btn:hover, .form-input input[type="email"]:focus, .form-input input[type="password"]:focus, .form-input input[type="text"]:focus {
+    transform: scalex(1.02);
+    border-color: #0C5131;
+    transition: .25s ease-in-out;
 }
 
-.logo {
-    image-rendering: smooth;
-    height: 52px;
-    width: 52px;
-    border-radius: 75%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 13px
+.btn:hover {
+    background-color: #0C5131 !important;
 }
 
-
-footer {
-    font-size: 0.9em
+.register-link {
+    text-decoration: none;
+    transition: 0.25s;
 }
 
-.footer-div {
-    background-color: #3D435B;
-    border: 2px solid #3D435B;
-    width: 95%;
-    margin: 1.25em auto
+.register-link:hover {
+    color: #f59324;
+    transition: 0.25s;
 }
 
-.text-center {
-    text-align: center
+.error-message {
+    color: #F71E45 !important;
+    text-align: center;
+}
+
+.centred {
+    text-align: center;
+}
+
+.left {
+    text-align: left;
+}
+
+.auth-divider {
+    width: 100%;
+}
+
+#index-body {
+    background-color: dimgray;
+}
+
+.disable-click {
+    pointer-events: none
 }

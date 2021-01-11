@@ -1,12 +1,38 @@
-<header>
-    <img alt="Our Logo" class="logo" src="{{ url_for('static',filename='resources/logo.png') }}">
-    <ul id="nav">
-        <li class="nav-item"><a href="{{ url_for('home_page') }}">Homepage</a></li>
-        <li class="nav-item"><a href="{{ url_for('contact_page') }}">Contact</a></li>
-        {% if session['logged_in'] == True %}
-            <li class="nav-item"><a href="{{ url_for('logout_page') }}">Logout</a></li>
-        {% else %}
-            <li class="nav-item"><a href="{{ url_for('login_page') }}">Login</a></li>
-        {% endif %}
-    </ul>
-</header>
+
+<nav class="navbar navbar-expand-md navbar-dark bg-none">
+    <div class="container-fluid">
+        <a class="navbar-brand disable-click" href="" id="nav-logo">
+            <img src="{{ url_for('static',filename='resources/logo.png') }}" alt="" width="48" height="48">
+        </a>
+        <a class="navbar-brand disable-click" href="">Group D</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav" id="right-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact</a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Projects
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="#">Pokedex</a></li>
+                        <li><a class="dropdown-item" href="#">To do list</a></li>
+                        <li><a class="dropdown-item" href="#">#</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

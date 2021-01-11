@@ -24,18 +24,27 @@ def login_page():
         if request.method == "POST":
             email = request.form.get("emailInput").strip()
             password = request.form.get("passwordInput").strip()
-            if email != "mightylordx786@gmail.com":
-                session['logged_in'] = True
-                session['bearer_code'] = get_bearer_code()
+            if email == "mightylordx786@gmail.com":
+                message = "Admin account"
             else:
-                session['logged_in'] = True
-                session['bearer_code'] = get_bearer_code()
-                session['admin'] = True
-                return redirect(url_for('home_page'))
+                message = "Normal Account"
+            # if email != "mightylordx786@gmail.com":
+            #     session['logged_in'] = True
+            #     session['bearer_code'] = get_bearer_code()
+            # else:
+            #     session['logged_in'] = True
+            #     session['bearer_code'] = get_bearer_code()
+            #     session['admin'] = True
+            #     return redirect(url_for('home_page'))
     except Exception as e:
         message = "Wrong Email or Password try again"
         print(e)
     return render_template("login.html", message=message)
+
+
+@app.route('/register', methods=["GET", "POST"])
+def register_page():
+    return render_template("register.html")
 
 
 @app.route('/logout')
