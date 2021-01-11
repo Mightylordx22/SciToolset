@@ -1,12 +1,15 @@
 from flask import Flask, render_template
-from functions import foo
+from functions import *
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    foo()
-    return render_template("index.html")
+    if is_logged_in(0):
+        return render_template("index.html")
+    else:
+        return render_template("login.html")
+
 
 @app.route('/contact')
 def contact_page():
