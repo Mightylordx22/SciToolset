@@ -13,12 +13,17 @@
                 <div class="card-body centred">
                     <img src="{{ url_for('static',filename='resources/Sci-Toolset.png') }}" alt="Sci-Toolset logo"
                          class="img-fluid mx-auto d-block disable-click">
-                    <form action="" class="form-box px-3">
+                    <form method="POST" class="form-box px-3">
+                        {% if message != "none" %}
+                            <p class="error-message">{{ message }}</p>
+                        {% endif %}
                         <div class="form-input">
-                            <input class="form-input" type="email" name="" placeholder="Email Address" tabindex="10"
+                            <input class="form-input" type="email" name="emailInput" placeholder="Email Address" tabindex="10"
                                    required>
-                            <input type="password" name="" placeholder="Password" required>
-                            <input type="text" name="" placeholder="Unique Code" required>
+                            <input type="password" name="passwordInput" placeholder="Password" required>
+                            <input type="text" name="firstNameInput" placeholder="First Name" required>
+                            <input type="text" name="lastNameInput" placeholder="Last Name" required>
+                            <input type="text" name="uCode" placeholder="Unique Code" required>
                         </div>
                         <div class="mb-3">
                             <button type="submit" class="btn btn-success">register</button>
