@@ -3,6 +3,7 @@ import hashlib
 import logging
 import os
 import sqlite3 as sql
+#from scripts.functions import check_password
 
 
 def connect_to_database():
