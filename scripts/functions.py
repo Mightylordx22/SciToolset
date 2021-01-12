@@ -28,7 +28,4 @@ def register_user(email, password, unique_code, f_name, l_name):
 
 
 def login(email, password):
-    if authenticate(email, password):
-        return True
-    else:
-        return False
+    return authenticate(email, password)

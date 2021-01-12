@@ -26,10 +26,15 @@ def login_page():
             email = request.form.get("emailInput").strip()
             password = request.form.get("passwordInput").strip()
 
-            if login(email, password):
-                message = "Admin account"
+            auth, status = login(email, password)
+
+            if auth:
+                if status:
+                    message = status
+                else:
+                    message = status
             else:
-                message = "Normal Account"
+                message = status
     except Exception as e:
         message = "Wrong Email or Password try again"
         print(e)
