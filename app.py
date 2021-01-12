@@ -22,20 +22,25 @@ def contact_page():
 def login_page():
     message = "none"
     try:
-        get_discover_bearer_code()
+        try:
+            if session["auth_token"]:
+                valid, new_token = get_auth_data(session["auth_token"])
+                if valid:
+                    if new_token == -1:
+                        return redirect(url_for("home_page"))
+                    else:
+                        session.pop('auth_token', None)
+        except Exception as e:
+            pass
         if request.method == "POST":
             email = request.form.get("emailInput").strip()
             password = request.form.get("passwordInput").strip()
-
-            auth, status = login(email, password)
-
-            if auth:
-                if status:
-                    message = status
-                else:
-                    message = status
-            else:
-                message = status
+            is_logged_in, status, u_id = login(email, password)
+            if is_logged_in:
+                # session["sci_token"] = get_discover_bearer_code()
+                session["auth_token"] = get_auth_token(app.config.get("SECRET_KEY"), u_id)
+                return redirect(url_for("home_page"))
+            message = status
     except Exception as e:
         message = "Problem signing in. Please contact a admin."
         print(e)
@@ -47,14 +52,14 @@ def register_page():
     message = "none"
     try:
         if request.method == "POST":
-            message = "none"
             reg = register_user(request.form.get("emailInput").strip(), request.form.get("passwordInput").strip(),
                                 request.form.get("uCode").strip(), request.form.get("firstNameInput").strip(),
                                 request.form.get("lastNameInput").strip())
             if type(reg) == str:
                 return render_template("register.html", message=reg)
             else:
-                return redirect(url_for(login_page))
+                print("hi")
+                return redirect(url_for("login_page"))
     except Exception as e:
         print(e)
     return render_template("register.html", message=message)
@@ -62,10 +67,8 @@ def register_page():
 
 @app.route('/logout')
 def logout_page():
-    session.pop('logged_in', None)
-    session.pop('bearer_code', None)
-    session.pop('admin', None)
-    return redirect(url_for('home_page'))
+    session.pop('auth_token', None)
+    return redirect(url_for('login_page'))
 
 
 @app.route('/test')
