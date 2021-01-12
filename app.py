@@ -25,18 +25,11 @@ def login_page():
         if request.method == "POST":
             email = request.form.get("emailInput").strip()
             password = request.form.get("passwordInput").strip()
-            if email == "mightylordx786@gmail.com":
+
+            if login(email, password):
                 message = "Admin account"
             else:
                 message = "Normal Account"
-            # if email != "mightylordx786@gmail.com":
-            #     session['logged_in'] = True
-            #     session['bearer_code'] = get_bearer_code()
-            # else:
-            #     session['logged_in'] = True
-            #     session['bearer_code'] = get_bearer_code()
-            #     session['admin'] = True
-            #     return redirect(url_for('home_page'))
     except Exception as e:
         message = "Wrong Email or Password try again"
         print(e)

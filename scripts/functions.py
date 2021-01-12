@@ -1,10 +1,8 @@
-from datetime import datetime
 from scripts.db_link import *
 from scripts.sci_discover import *
 
 
 def get_bearer_code():
-    authenticate("a", "a")
     return get_discover_bearer_code()
 
 
@@ -27,3 +25,10 @@ def register_user(email, password, unique_code, f_name, l_name):
             return "Sorry that code is incorrect"
     else:
         return "Sorry that email is being used already"
+
+
+def login(email, password):
+    if authenticate(email, password):
+        return True
+    else:
+        return False
