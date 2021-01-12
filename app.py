@@ -38,7 +38,7 @@ def login_page():
             is_logged_in, status, u_id = login(email, password)
             if is_logged_in:
                 # session["sci_token"] = get_discover_bearer_code()
-                session["auth_token"] = gen_auth_token(app.config.get("SECRET_KEY"), u_id)
+                session["auth_token"] = get_auth_token(app.config.get("SECRET_KEY"), u_id)
                 return redirect(url_for("home_page"))
             message = status
     except Exception as e:
@@ -68,7 +68,7 @@ def register_page():
 @app.route('/logout')
 def logout_page():
     session.pop('auth_token', None)
-    return redirect(url_for('home_page'))
+    return redirect(url_for('login_page'))
 
 
 @app.route('/test')

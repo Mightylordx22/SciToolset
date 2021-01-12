@@ -37,10 +37,12 @@ def store_token(token, u_id, issue, expire):
                 (u_id, issue, expire, token, True,))
     conn.commit()
 
+
 def update_token(token_id):
     conn, cur = connect_to_database()
     cur.execute("UPDATE tokens SET active = 0 WHERE token_id = ?;", (token_id,))
     conn.commit()
+
 
 def check_password(user_password, stored_password):
     """
