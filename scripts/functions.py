@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from scripts.db_link import *
 from scripts.sci_discover import *
 

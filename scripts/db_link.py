@@ -27,7 +27,7 @@ def authenticate(email, password):
             else:
                 return False, "Problem signing in. Please contact a admin"
 
-    return False,
+    return False, "Wrong Email or Password try again"
 
 
 def data_query(query):
