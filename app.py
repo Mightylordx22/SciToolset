@@ -44,6 +44,14 @@ def login_page():
 
 @app.route('/register', methods=["GET", "POST"])
 def register_page():
+    message = "none"
+    try:
+        if request.method == "POST":
+            pass
+    except Exception as e:
+        message = "Wrong Email or Password try again"
+        print(e)
+
     return render_template("register.html")
 
 
