@@ -21,6 +21,7 @@ def contact_page():
 def login_page():
     message = "none"
     try:
+        get_discover_bearer_code()
         if request.method == "POST":
             email = request.form.get("emailInput").strip()
             password = request.form.get("passwordInput").strip()
