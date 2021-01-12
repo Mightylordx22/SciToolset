@@ -18,11 +18,17 @@ def connect_to_database():
 
 def authenticate(email, password):
     result = data_query(f"SELECT * FROM users WHERE email_address = '{email}'")
-    if result != []:
+    if result:
         if check_password(password, result[0][6]):
-            return True
-    else:
-        return False
+            if result[0][5]:
+                if result[0][4]:
+                    return True, "Admin Account"
+                else:
+                    return True, "Normal Account"
+            else:
+                return False, "Problem signing in. Please contact a admin"
+
+    return False,
 
 
 def data_query(query):

@@ -10,7 +10,4 @@ def get_bearer_code():
 
 
 def login(email, password):
-    if authenticate(email, password):
-        return True
-    else:
-        return False
+    return authenticate(email, password)
