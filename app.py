@@ -27,15 +27,16 @@ def login_page():
             email = request.form.get("emailInput").strip()
             password = request.form.get("passwordInput").strip()
 
-            auth, status = login(email, password)
+            is_logged_in, status = login(email, password)
 
-            if auth:
-                if status:
-                    message = status
-                else:
-                    message = status
-            else:
-                message = status
+            if is_logged_in:
+                session["token"] = get_auth_token()
+                if type(status) == bool:
+                    if status:
+                        print("Admin")
+                    else:
+                        print("Normal account")
+            message = status
     except Exception as e:
         message = "Problem signing in. Please contact a admin."
         print(e)
@@ -47,14 +48,14 @@ def register_page():
     message = "none"
     try:
         if request.method == "POST":
-            message = "none"
             reg = register_user(request.form.get("emailInput").strip(), request.form.get("passwordInput").strip(),
                                 request.form.get("uCode").strip(), request.form.get("firstNameInput").strip(),
                                 request.form.get("lastNameInput").strip())
             if type(reg) == str:
                 return render_template("register.html", message=reg)
             else:
-                return redirect(url_for(login_page))
+                print("hi")
+                return redirect(url_for("login_page"))
     except Exception as e:
         print(e)
     return render_template("register.html", message=message)
