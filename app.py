@@ -37,7 +37,7 @@ def login_page():
             else:
                 message = status
     except Exception as e:
-        message = "Wrong Email or Password try again"
+        message = "Problem signing in. Please contact a admin."
         print(e)
     return render_template("login.html", message=message)
 
