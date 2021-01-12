@@ -1,5 +1,6 @@
-from datetime import datetime
+import jwt
 
+from datetime import datetime
 from scripts.db_link import *
 from scripts.sci_discover import *
 
@@ -33,5 +34,33 @@ def login(email, password):
     return authenticate(email, password)
 
 
-def get_auth_token():
-    pass
+def gen_auth_token(secret, user_id):
+    now = datetime.now()
+    timestamp = int(datetime.timestamp(now))
+    expiry_timestamp = timestamp + 86400
+    payload = {
+        "issue": timestamp,
+        "expiry": expiry_timestamp,
+        "id": user_id
+    }
+    token = jwt.encode(payload, secret, algorithm="HS256")
+    store_token(token, user_id, timestamp, expiry_timestamp)
+    return token
+
+
+def get_auth_data(token):
+    try:
+        conn, cur = connect_to_database()
+        valid = cur.execute("SELECT * FROM tokens WHERE token = ?;", (token,)).fetchone()
+        if valid:
+            if bool(valid[5]) is True:
+                now = datetime.now()
+                timestamp = int(datetime.timestamp(now))
+                if timestamp < valid[3]:
+                    return True, -1
+                else:
+                    update_token(valid[0])
+                    return True, 1
+    except Exception as e:
+        print("Something went wrong: " + e)
+    return False, -1
