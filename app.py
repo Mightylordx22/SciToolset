@@ -22,23 +22,22 @@ def contact_page():
 def login_page():
     message = "none"
     try:
+        get_discover_bearer_code()
         if request.method == "POST":
             email = request.form.get("emailInput").strip()
             password = request.form.get("passwordInput").strip()
-            if email == "mightylordx786@gmail.com":
-                message = "Admin account"
+
+            auth, status = login(email, password)
+
+            if auth:
+                if status:
+                    message = status
+                else:
+                    message = status
             else:
-                message = "Normal Account"
-            # if email != "mightylordx786@gmail.com":
-            #     session['logged_in'] = True
-            #     session['bearer_code'] = get_bearer_code()
-            # else:
-            #     session['logged_in'] = True
-            #     session['bearer_code'] = get_bearer_code()
-            #     session['admin'] = True
-            #     return redirect(url_for('home_page'))
+                message = status
     except Exception as e:
-        message = "Wrong Email or Password try again"
+        message = "Problem signing in. Please contact a admin."
         print(e)
     return render_template("login.html", message=message)
 
