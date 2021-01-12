@@ -57,7 +57,7 @@ def get_auth_data(token):
                 now = datetime.now()
                 timestamp = int(datetime.timestamp(now))
                 if timestamp < valid[3]:
-                    cur.execute("UPDATE tokens SET expiry_time = ? WHERE token_id = ?;", (timestamp+86400, valid[0],))
+                    cur.execute("UPDATE tokens SET expiry_time = ? WHERE token_id = ?;", (timestamp + 86400, valid[0],))
                     return True, -1
                 else:
                     update_token(valid[0])
@@ -65,6 +65,7 @@ def get_auth_data(token):
     except Exception as e:
         print("Something went wrong: " + e)
     return False, -1
+
 
 def get_auth_token(secret, u_id):
     try:
@@ -79,8 +80,9 @@ def get_auth_token(secret, u_id):
                 conn.commit()
                 return gen_auth_token(secret, u_id)
             else:
-                cur.execute("UPDATE tokens SET expiry_time = ? WHERE token_id = ?;", (timestamp+86400, last[0]))
+                cur.execute("UPDATE tokens SET expiry_time = ? WHERE token_id = ?;", (timestamp + 86400, last[0]))
                 conn.commit()
+                return last[4]
         else:
             return gen_auth_token(secret, u_id)
     except Exception as e:
