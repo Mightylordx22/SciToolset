@@ -21,8 +21,8 @@ def home_page():
                     return render_template("index.html")
                 else:
                     session.pop('auth_token', None)
-    except Exception as e:
-        print(e)
+    except:
+        pass
     return redirect(url_for("login_page"))
 
 
@@ -43,7 +43,7 @@ def login_page():
                         return redirect(url_for("home_page"))
                     else:
                         session.pop('auth_token', None)
-        except Exception as e:
+        except:
             pass
         if request.method == "POST":
             email = request.form.get("emailInput").strip()

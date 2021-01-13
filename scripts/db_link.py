@@ -71,8 +71,9 @@ def use_bearer_token():
     """
     conn, cur = connect_to_database()
     cur.execute(
-        "UPDATE sci_tokens SET number_of_use = number_of_use + 1 WHERE token_id = (SELECT token_id FROM sci_tokens ORDER BY token_id DESC LIMIT 1);  ")
+        "UPDATE sci_tokens SET number_of_use = number_of_use + 1 WHERE token_id = (SELECT token_id FROM sci_tokens ORDER BY token_id DESC LIMIT 1);")
     conn.commit()
+
 
 def check_password(user_password, stored_password):
     """

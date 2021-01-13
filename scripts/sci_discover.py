@@ -29,6 +29,7 @@ def auth_discover_bearer_token():
                                         data=payload, headers=headers, verify=False)
             data = json.loads(response.text)
             save_bearer_token(data)
-        use_bearer_token()
+        else:
+            use_bearer_token()
     except Exception as e:
         print(e)
