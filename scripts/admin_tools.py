@@ -1,4 +1,5 @@
 from random import randint
+
 from scripts.db_link import connect_to_database
 
 

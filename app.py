@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-
 import os
 
-from scripts.functions import get_auth_data, login, register_user, get_auth_token
+from flask import Flask, render_template, request, redirect, url_for, session
+
 from scripts.admin_tools import gen_unique_code
+from scripts.functions import get_auth_data, login, register_user, get_auth_token
 from scripts.sci_discover import get_discover_bearer_token
 
 app = Flask(__name__)
