@@ -8,5 +8,5 @@ def gen_unique_code():
     code = ""
     for i in range(0, 16):
         code += letters[randint(0, len(letters) - 1)]
-    cur.execute("INSERT INTO UPC('unique_pass_code','used') VALUES (?,?);", (code, False,))
+    cur.execute("INSERT INTO UPC('unique_pass_code','used','admin_token') VALUES (?,?,?);", (code, False, 0,))
     conn.commit()

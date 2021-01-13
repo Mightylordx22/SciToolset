@@ -1,12 +1,11 @@
+from datetime import datetime
+
 import jwt
 
-from datetime import datetime
-from scripts.db_link import *
-from scripts.sci_discover import *
+from scripts.db_link import connect_to_database, authenticate, store_token, update_token
 
-
-def get_bearer_code():
-    return get_discover_bearer_code()
+# def get_bearer_code():
+#     return get_discover_bearer_code()
 
 
 def register_user(email, password, unique_code, f_name, l_name):
@@ -17,7 +16,8 @@ def register_user(email, password, unique_code, f_name, l_name):
         if is_unique_code and is_unique_code[2] == 0:
             cur.execute(
                 "INSERT INTO users('email_address','first_name','last_name','is_admin','is_active','user_password') "
-                "VALUES (?,?,?,?,?,?);", (email, f_name.lower(), l_name.lower(), 0, 1, hash_password(password)))
+                "VALUES (?,?,?,?,?,?);",
+                (email, f_name.lower(), l_name.lower(), bool(is_unique_code[5]), 1, hash_password(password)))
             conn.commit()
             u_id = cur.execute(f"SELECT user_id FROM users WHERE email_address = ?;", (email,)).fetchone()
             cur.execute("UPDATE UPC SET used = ?, time_of_use = ?, user_id = ? WHERE unique_pass_code = ?;",
@@ -35,8 +35,7 @@ def login(email, password):
 
 
 def gen_auth_token(secret, user_id):
-    now = datetime.now()
-    timestamp = int(datetime.timestamp(now))
+    timestamp = get_time_now()
     expiry_timestamp = timestamp + 86400
     payload = {
         "issue": timestamp,
@@ -54,8 +53,7 @@ def get_auth_data(token):
         valid = cur.execute("SELECT * FROM tokens WHERE token = ?;", (token,)).fetchone()
         if valid:
             if bool(valid[5]) is True:
-                now = datetime.now()
-                timestamp = int(datetime.timestamp(now))
+                timestamp = get_time_now()
                 if timestamp < valid[3]:
                     cur.execute("UPDATE tokens SET expiry_time = ? WHERE token_id = ?;", (timestamp + 86400, valid[0],))
                     return True, -1
@@ -73,8 +71,7 @@ def get_auth_token(secret, u_id):
         data = cur.execute("SELECT * FROM tokens WHERE user_id = ?;", (u_id,)).fetchall()
         if data:
             last = data[-1]
-            now = datetime.now()
-            timestamp = int(datetime.timestamp(now))
+            timestamp = get_time_now()
             if timestamp > last[3]:
                 cur.execute("UPDATE tokens SET active = 0 WHERE token_id = ?;", (last[0],))
                 conn.commit()
@@ -87,3 +84,8 @@ def get_auth_token(secret, u_id):
             return gen_auth_token(secret, u_id)
     except Exception as e:
         print(e)
+
+
+def get_time_now():
+    now = datetime.now()
+    return int(datetime.timestamp(now))

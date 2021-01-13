@@ -4,6 +4,8 @@ import logging
 import os
 import sqlite3 as sql
 
+from datetime import datetime
+
 
 def connect_to_database():
     try:
@@ -44,6 +46,31 @@ def update_token(token_id):
     conn.commit()
 
 
+def save_bearer_token(data):
+    conn, cur = connect_to_database()
+    expiry_timestamp = get_time_now() + data["expires_in"]
+    cur.execute(
+        "INSERT INTO sci_tokens('token','token_type','refresh_token','expiry_time', 'permissions', 'number_of_use') VALUES (?,?,?,?,?,?)",
+        (data["access_token"], data["token_type"], data["refresh_token"], expiry_timestamp, data["scope"], 0,))
+    conn.commit()
+
+
+def check_for_bearer_token():
+    conn, cur = connect_to_database()
+    data = cur.execute("SELECT * FROM sci_tokens ORDER BY token_id DESC LIMIT 1;").fetchone()
+    if data:
+        if get_time_now() < data[4]:
+            print("Token still in use")
+        else:
+            print("Token invalid")
+    else:
+        print("Need to get new token")
+
+
+def used_bearer_token():
+    pass
+
+
 def check_password(user_password, stored_password):
     """
     A function that checks to see if the user's password is correct or not
@@ -68,3 +95,8 @@ def hash_password(password):
     pass_hash = hashlib.pbkdf2_hmac('sha512', password.encode('utf-8'), salt, 100000)
     pass_hash = binascii.hexlify(pass_hash)
     return (salt + pass_hash).decode('ascii')
+
+
+def get_time_now():
+    now = datetime.now()
+    return int(datetime.timestamp(now))
