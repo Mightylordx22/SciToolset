@@ -2,7 +2,7 @@ from datetime import datetime
 
 import jwt
 
-from scripts.db_link import connect_to_database, authenticate, store_token, update_token
+from scripts.db_link import connect_to_database, authenticate, store_token, update_token, hash_password
 
 # def get_bearer_code():
 #     return get_discover_bearer_code()

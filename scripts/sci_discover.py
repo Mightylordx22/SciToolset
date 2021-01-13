@@ -1,7 +1,7 @@
 import json
 
 import requests
-#
+
 from scripts.db_link import save_bearer_token, check_for_bearer_token
 
 
