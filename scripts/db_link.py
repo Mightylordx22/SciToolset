@@ -75,6 +75,11 @@ def use_bearer_token():
     conn.commit()
 
 
+def get_user_data(u_id):
+    conn, cur = connect_to_database()
+    data = cur.execute("SELECT * FROM users WHERE user_id = ?;", (u_id,)).fetchone()
+    return data
+
 def check_password(user_password, stored_password):
     """
     A function that checks to see if the user's password is correct or not

@@ -2,7 +2,7 @@ from datetime import datetime
 
 import jwt
 
-from scripts.db_link import connect_to_database, authenticate, store_token, update_token, hash_password
+from scripts.db_link import connect_to_database, authenticate, store_token, update_token, hash_password, get_user_data
 
 
 # def get_bearer_code():
@@ -57,10 +57,15 @@ def get_auth_data(token):
                 timestamp = get_time_now()
                 if timestamp < valid[3]:
                     cur.execute("UPDATE tokens SET expiry_time = ? WHERE token_id = ?;", (timestamp + 86400, valid[0],))
-                    return True, -1
+                    user = get_user_data(valid[1])
+
+                    if bool(user[4]) is True:
+                        return True, 2
+
+                    return True, 1
                 else:
                     update_token(valid[0])
-                    return True, 1
+                    return True, -1
     except Exception as e:
         print("Something went wrong: " + e)
     return False, -1
@@ -90,3 +95,8 @@ def get_auth_token(secret, u_id):
 def get_time_now():
     now = datetime.now()
     return int(datetime.timestamp(now))
+
+
+def get_user_id_from_token(token):
+    conn, cur = connect_to_database()
+    return cur.execute("SELECT user_id FROM tokens WHERE token = ?;", (token,)).fetchone()[0]
