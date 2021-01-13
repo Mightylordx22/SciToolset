@@ -10,7 +10,17 @@ app.config["SECRET_KEY"] = os.urandom(24)
 
 @app.route('/')
 def home_page():
-    return render_template("index.html")
+    try:
+        if session["auth_token"]:
+            valid, new_token = get_auth_data(session["auth_token"])
+            if valid:
+                if new_token == -1:
+                    return render_template("index.html")
+                else:
+                    session.pop('auth_token', None)
+    except Exception as e:
+        pass
+    return redirect(url_for("login_page"))
 
 
 @app.route('/contact')
