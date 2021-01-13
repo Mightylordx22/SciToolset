@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 
 from scripts.admin_tools import gen_unique_code
 from scripts.functions import get_auth_data, login, register_user, get_auth_token
-from scripts.sci_discover import get_discover_bearer_token
+from scripts.sci_discover import auth_discover_bearer_token
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
@@ -17,12 +17,12 @@ def home_page():
             valid, new_token = get_auth_data(session["auth_token"])
             if valid:
                 if new_token == -1:
-                    get_discover_bearer_token()
+                    auth_discover_bearer_token()
                     return render_template("index.html")
                 else:
                     session.pop('auth_token', None)
     except Exception as e:
-        pass
+        print(e)
     return redirect(url_for("login_page"))
 
 
@@ -50,7 +50,6 @@ def login_page():
             password = request.form.get("passwordInput").strip()
             is_logged_in, status, u_id = login(email, password)
             if is_logged_in:
-                # session["sci_token"], session["sci_expires"] =
                 session["auth_token"] = get_auth_token(app.config.get("SECRET_KEY"), u_id)
                 return redirect(url_for("home_page"))
             message = status
@@ -80,8 +79,6 @@ def register_page():
 @app.route('/logout')
 def logout_page():
     session.pop('auth_token', None)
-    session.pop('sci_token', None)
-    session.pop('sci_expires', None)
     return redirect(url_for('login_page'))
 
 

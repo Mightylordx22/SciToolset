@@ -60,16 +60,19 @@ def check_for_bearer_token():
     data = cur.execute("SELECT * FROM sci_tokens ORDER BY token_id DESC LIMIT 1;").fetchone()
     if data:
         if get_time_now() < data[4]:
-            print("Token still in use")
-        else:
-            print("Token invalid")
-    else:
-        print("Need to get new token")
+            return data[1]
+    return False
 
 
-def used_bearer_token():
-    pass
-
+def use_bearer_token():
+    """
+    Adds one to number of use in token
+    :return:
+    """
+    conn, cur = connect_to_database()
+    cur.execute(
+        "UPDATE sci_tokens SET number_of_use = number_of_use + 1 WHERE token_id = (SELECT token_id FROM sci_tokens ORDER BY token_id DESC LIMIT 1);  ")
+    conn.commit()
 
 def check_password(user_password, stored_password):
     """
