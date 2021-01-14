@@ -5,11 +5,13 @@
     <title>404 Not Found</title>
     {% include 'includes/links.html' %}
 </head>
-<body >
+<body>
 <div class="centred middle">
     <h1>404!</h1>
     <h2>Sorry <span id="not-found">{{ request.path }}</span> was not found on this server.</h2>
-    <a href="{{ url_for("home_page") }}"><button class="btn btn-success">Go back to the homepage</button></a>
+    <a href="{{ url_for("home_page") }}">
+        <button class="btn btn-success">Go back to the homepage</button>
+    </a>
 </div>
 </body>
 </html>

@@ -25,7 +25,8 @@ def auth_discover_bearer_token():
                 'Host': "hallam.sci-toolset.com"
             }
             response = requests.request("POST", url, auth=(
-                "b2166e80-b732-4408-92f1-c53a523f2123", "79c0063046539713e1ad99c3a2ab24e2fd787bd37adca581e11cbc951fdac583"),
+                "b2166e80-b732-4408-92f1-c53a523f2123",
+                "79c0063046539713e1ad99c3a2ab24e2fd787bd37adca581e11cbc951fdac583"),
                                         data=payload, headers=headers, verify=False)
             data = json.loads(response.text)
             save_bearer_token(data)
