@@ -21,7 +21,7 @@ def home_page():
             if valid:
                 if new_token >= 1:
                     authenticate_discover_bearer_token()
-                    return render_template("test.html", is_admin=new_token)
+                    return render_template("index.html", is_admin=new_token)
                 else:
                     session.pop('auth_token', None)
     except:
