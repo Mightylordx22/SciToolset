@@ -1,8 +1,8 @@
 import os
-
 from flask import Flask, render_template, request, redirect, url_for, session
-from scripts.functions import *
-from scripts.admin_tools import gen_unique_code
+
+from scripts.functions import get_authenticate_data, login, get_authenticate_token, get_user_id_from_token, register, \
+    authenticate_discover_bearer_token, get_user, genarate_unique_code, get_unique_codes
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
@@ -10,7 +10,18 @@ app.config["SECRET_KEY"] = os.urandom(24)
 
 @app.route('/')
 def home_page():
-    return render_template("index.html")
+    try:
+        if session["auth_token"]:
+            valid, new_token = get_authenticate_data(session["auth_token"])
+            if valid:
+                if new_token >= 1:
+                    authenticate_discover_bearer_token()
+                    return render_template("index.html")
+                else:
+                    session.pop('auth_token', None)
+    except:
+        pass
+    return redirect(url_for("login_page"))
 
 
 @app.route('/contact')
@@ -22,20 +33,24 @@ def contact_page():
 def login_page():
     message = "none"
     try:
-        get_discover_bearer_code()
+        try:
+            if session["auth_token"]:
+                valid, new_token = get_authenticate_data(session["auth_token"])
+                if valid:
+                    if new_token >= 1:
+                        return redirect(url_for("home_page"))
+                    else:
+                        session.pop('auth_token', None)
+        except:
+            pass
         if request.method == "POST":
             email = request.form.get("emailInput").strip()
             password = request.form.get("passwordInput").strip()
-
-            auth, status = login(email, password)
-
-            if auth:
-                if status:
-                    message = status
-                else:
-                    message = status
-            else:
-                message = status
+            is_logged_in, status, u_id = login(email, password)
+            if is_logged_in:
+                session["auth_token"] = get_authenticate_token(app.config.get("SECRET_KEY"), u_id)
+                return redirect(url_for("home_page"))
+            message = status
     except Exception as e:
         message = "Problem signing in. Please contact a admin."
         print(e)
@@ -47,14 +62,13 @@ def register_page():
     message = "none"
     try:
         if request.method == "POST":
-            message = "none"
-            reg = register_user(request.form.get("emailInput").strip(), request.form.get("passwordInput").strip(),
-                                request.form.get("uCode").strip(), request.form.get("firstNameInput").strip(),
-                                request.form.get("lastNameInput").strip())
+            reg = register(request.form.get("emailInput").strip(), request.form.get("passwordInput").strip(),
+                           request.form.get("uCode").strip(), request.form.get("firstNameInput").strip(),
+                           request.form.get("lastNameInput").strip())
             if type(reg) == str:
                 return render_template("register.html", message=reg)
             else:
-                return redirect(url_for(login_page))
+                return redirect(url_for("login_page"))
     except Exception as e:
         print(e)
     return render_template("register.html", message=message)
@@ -62,16 +76,33 @@ def register_page():
 
 @app.route('/logout')
 def logout_page():
-    session.pop('logged_in', None)
-    session.pop('bearer_code', None)
-    session.pop('admin', None)
-    return redirect(url_for('home_page'))
+    session.pop('auth_token', None)
+    return redirect(url_for('login_page'))
 
 
-@app.route('/test')
-def test_page():
-    gen_unique_code()
-    return "Done"
+@app.route('/admin/dashboard', methods=["GET", "POST"])
+def admin_page():
+    try:
+        if session["auth_token"]:
+            valid, new_token = get_authenticate_data(session["auth_token"])
+            if valid:
+                if new_token == 2:
+                    if request.method == "POST":
+                        is_admin = 1 if request.form.get("is_admin") is not None else 0
+                        genarate_unique_code(is_admin)
+                    # auth_discover_bearer_token()
+                    user_id = get_user_id_from_token(session["auth_token"])
+                    name = get_user(user_id)[2]
+                    codes = get_unique_codes()
+                    return render_template("admin.html", name=name.capitalize(), codes=codes)
+    except Exception as e:
+        print(e)
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 
 if __name__ == "__main__":

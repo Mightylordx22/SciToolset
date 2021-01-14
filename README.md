@@ -1,8 +1,6 @@
 # Sci Toolset API Analysis
 
-
 ## Description
-
 
 ### What this does
 
