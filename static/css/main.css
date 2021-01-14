@@ -105,3 +105,15 @@
     pointer-events: none;
     user-select: none;
 }
+
+.middle {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: "Comfortaa", sans-serif;
+}
+
+#not-found {
+    color: salmon;
+}
