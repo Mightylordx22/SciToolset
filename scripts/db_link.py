@@ -80,6 +80,12 @@ def get_user_data(u_id):
     data = cur.execute("SELECT * FROM users WHERE user_id = ?;", (u_id,)).fetchone()
     return data
 
+
+def get_user_id(token):
+    conn, cur = connect_to_database()
+    return cur.execute("SELECT user_id FROM tokens WHERE token = ?;", (token,)).fetchone()[0]
+
+
 def check_password(user_password, stored_password):
     """
     A function that checks to see if the user's password is correct or not

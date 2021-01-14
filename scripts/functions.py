@@ -1,102 +1,40 @@
-from datetime import datetime
-
-import jwt
-
-from scripts.db_link import connect_to_database, authenticate, store_token, update_token, hash_password, get_user_data
-
-
-# def get_bearer_code():
-#     return get_discover_bearer_code()
+from scripts.admin_tools import get_codes, gen_unique_code
+from scripts.db_link import authenticate, get_user_data, get_user_id
+from scripts.login import get_auth_data, get_auth_token
+from scripts.register import register_user
+from scripts.sci_discover import auth_discover_bearer_token
 
 
-def register_user(email, password, unique_code, f_name, l_name):
-    conn, cur = connect_to_database()
-    data = cur.execute(f"SELECT * FROM users WHERE email_address = ?;", (email,)).fetchone()
-    if not data:
-        is_unique_code = cur.execute("SELECT * FROM UPC WHERE unique_pass_code = ?;", (unique_code,)).fetchone()
-        if is_unique_code and is_unique_code[2] == 0:
-            cur.execute(
-                "INSERT INTO users('email_address','first_name','last_name','is_admin','is_active','user_password') "
-                "VALUES (?,?,?,?,?,?);",
-                (email, f_name.lower(), l_name.lower(), bool(is_unique_code[5]), 1, hash_password(password)))
-            conn.commit()
-            u_id = cur.execute(f"SELECT user_id FROM users WHERE email_address = ?;", (email,)).fetchone()
-            cur.execute("UPDATE UPC SET used = ?, time_of_use = ?, user_id = ? WHERE unique_pass_code = ?;",
-                        (True, datetime.now().strftime("%d/%m/%Y %H:%M:%S"), u_id[0], unique_code))
-            conn.commit()
-            return True
-        else:
-            return "Sorry that code is incorrect"
-    else:
-        return "Sorry that email is being used already"
+def register(email, password, unique_code, f_name, l_name):
+    return register_user(email, password, unique_code, f_name, l_name)
 
 
 def login(email, password):
     return authenticate(email, password)
 
 
-def gen_auth_token(secret, user_id):
-    timestamp = get_time_now()
-    expiry_timestamp = timestamp + 86400
-    payload = {
-        "issue": timestamp,
-        "expiry": expiry_timestamp,
-        "id": user_id
-    }
-    token = jwt.encode(payload, secret, algorithm="HS256")
-    store_token(token, user_id, timestamp, expiry_timestamp)
-    return token
+def get_authenticate_data(token):
+    return get_auth_data(token)
 
 
-def get_auth_data(token):
-    try:
-        conn, cur = connect_to_database()
-        valid = cur.execute("SELECT * FROM tokens WHERE token = ?;", (token,)).fetchone()
-        if valid:
-            if bool(valid[5]) is True:
-                timestamp = get_time_now()
-                if timestamp < valid[3]:
-                    cur.execute("UPDATE tokens SET expiry_time = ? WHERE token_id = ?;", (timestamp + 86400, valid[0],))
-                    user = get_user_data(valid[1])
-
-                    if bool(user[4]) is True:
-                        return True, 2
-
-                    return True, 1
-                else:
-                    update_token(valid[0])
-                    return True, -1
-    except Exception as e:
-        print("Something went wrong: " + e)
-    return False, -1
+def get_authenticate_token(secret, u_id):
+    return get_auth_token(secret, u_id)
 
 
-def get_auth_token(secret, u_id):
-    try:
-        conn, cur = connect_to_database()
-        data = cur.execute("SELECT * FROM tokens WHERE user_id = ?;", (u_id,)).fetchall()
-        if data:
-            last = data[-1]
-            timestamp = get_time_now()
-            if timestamp > last[3]:
-                cur.execute("UPDATE tokens SET active = 0 WHERE token_id = ?;", (last[0],))
-                conn.commit()
-                return gen_auth_token(secret, u_id)
-            else:
-                cur.execute("UPDATE tokens SET expiry_time = ? WHERE token_id = ?;", (timestamp + 86400, last[0]))
-                conn.commit()
-                return last[4]
-        else:
-            return gen_auth_token(secret, u_id)
-    except Exception as e:
-        print(e)
+def authenticate_discover_bearer_token():
+    auth_discover_bearer_token()
+
+def genarate_unique_code():
+    gen_unique_code()
 
 
-def get_time_now():
-    now = datetime.now()
-    return int(datetime.timestamp(now))
+def get_unique_codes():
+    return get_codes()
+
+
+def get_user(u_id):
+    return get_user_data(u_id)
 
 
 def get_user_id_from_token(token):
-    conn, cur = connect_to_database()
-    return cur.execute("SELECT user_id FROM tokens WHERE token = ?;", (token,)).fetchone()[0]
+    return get_user_id(token)

@@ -1,5 +1,6 @@
 from random import randint
 from string import ascii_letters, digits
+
 from scripts.db_link import connect_to_database
 
 
