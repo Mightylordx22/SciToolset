@@ -4,24 +4,74 @@
     <meta charset="UTF-8">
     <title>Admin Panel</title>
     {% include 'includes/links.html' %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var arr = {{ codes|tojson }};
+        $(document).ready(function () {
+            var tooltip = $('[data-toggle="tooltip"]');
+            tooltip.tooltip();
+            $(".show-me").hover(function () {
+                var id = $(this).attr('id');
+                $(this).attr("value", arr[id]);
+                $(this).click(() => {
+                    copyMe(id);
+                });
+            }, function () {
+                $(this).attr("value", "••••••••••••••••");
+            });
+        });
+
+        function copyMe(id) {
+            var copyText = document.getElementById(id);
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            document.execCommand("copy");
+        }
+
+    </script>
 </head>
 <body id="index-body">
 {% include 'includes/header.html' %}
 <main>
-    <div class="container centred">
+    <div class="container ">
         <h1>Hi There {{ name }}</h1>
 
-        <form method="post">
-            <label>Tick to make unique code admin
-            <input value="pe" type="checkbox" aria-label="Checkbox for following text input" name="is_admin"></label>
-            <br>
-            <button type="submit" class="btn btn-dark">Generate Unique Code</button>
-        </form>
+        {% if codes != [] %}
+            {% for i in range(codes|length) %}
+                <input type="text" id="{{ i }}" class="show-me" readonly="" autocapitalize="off" autocorrect="off"
+                       value="••••••••••••••••" data-toggle="tooltip" data-bs-placement="top"
+                       title="Click to copy">
+            {% endfor %}
 
+        {% else %}
+            <h1>There are no unique codes generate some!</h1>
+        {% endif %}
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <form method="post" class="centred">
+            <label>Tick to make unique code admin
+                <input value="admin_checkbox" type="checkbox" aria-label="Checkbox for following text input"
+                       name="is_admin"></label>
+            <br>
+            <button type="submit" class="btn btn-dark" value="beep">Generate Unique Code</button>
+        </form>
     </div>
 </main>
 
-
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+        integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
+        crossorigin="anonymous"></script>
 {% include 'includes/footer.html' %}
 </body>
 </html>

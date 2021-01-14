@@ -1,8 +1,7 @@
 import os
 
 from flask import Flask, render_template, request, redirect, url_for, session
-
-from scripts.admin_tools import gen_unique_code
+from scripts.admin_tools import get_codes, gen_unique_code
 from scripts.db_link import get_user_data
 from scripts.functions import get_auth_data, login, register_user, get_auth_token, get_user_id_from_token
 from scripts.sci_discover import auth_discover_bearer_token
@@ -96,9 +95,8 @@ def admin_page():
                     # auth_discover_bearer_token()
                     user_id = get_user_id_from_token(session["auth_token"])
                     name = get_user_data(user_id)[2]
-                    return render_template("admin.html", name=name.capitalize())
-                else:
-                    session.pop('auth_token', None)
+                    codes = get_codes()
+                    return render_template("admin.html", name=name.capitalize(), codes=codes)
     except Exception as e:
         print(e)
     return render_template('404.html'), 404
