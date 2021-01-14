@@ -9,6 +9,11 @@ app.config["SECRET_KEY"] = os.urandom(24)
 
 
 @app.route('/')
+def redirect_homepage():
+    return redirect(url_for("home_page"))
+
+
+@app.route('/map')
 def home_page():
     try:
         if session["auth_token"]:
@@ -16,7 +21,7 @@ def home_page():
             if valid:
                 if new_token >= 1:
                     authenticate_discover_bearer_token()
-                    return render_template("index.html")
+                    return render_template("test.html", is_admin=new_token)
                 else:
                     session.pop('auth_token', None)
     except:
@@ -24,9 +29,9 @@ def home_page():
     return redirect(url_for("login_page"))
 
 
-@app.route('/contact')
-def contact_page():
-    return render_template("contact.html")
+@app.route('/map/tables')
+def table_page():
+    return "Hi"
 
 
 @app.route('/login', methods=["GET", "POST"])

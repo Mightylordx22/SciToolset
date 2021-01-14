@@ -24,8 +24,8 @@ def get_authenticate_token(secret, u_id):
 def authenticate_discover_bearer_token():
     auth_discover_bearer_token()
 
-def genarate_unique_code():
-    gen_unique_code()
+def genarate_unique_code(is_admin):
+    gen_unique_code(is_admin)
 
 
 def get_unique_codes():

@@ -117,3 +117,58 @@
 #not-found {
     color: salmon;
 }
+
+.index-body{
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background-color: dimgray;
+}
+
+.side-menu{
+    position: absolute;
+    background: rgba(00, 00, 00, 0.75);
+    margin: 10px;
+    height: 80%;
+    width: 18% !important;
+}
+
+
+@media  only screen and  (max-width: 768px) {
+    .side-menu{
+        display: none;
+    }
+}
+
+@media  only screen and  (max-width: 920px) {
+    .side-menu{
+        width: 34% !important;
+    }
+}
+
+.col-11{
+    text-align: center;
+}
+
+.col-11{
+    background: rgba(76, 175, 80, 0.0);
+    position: absolute;
+    margin: 10px;
+}
+
+.h-8{
+    height: 8%;
+}
+
+.h-92{
+    height: 92%;
+}
+
+.nav-link {
+    color: white;
+}
+
+.nav-link:hover {
+    color: white;
+    background-color: rgba(51, 170, 51, .4) !important;
+}
