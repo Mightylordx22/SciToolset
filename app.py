@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask, render_template, request, redirect, url_for, session
-
 from scripts.admin_tools import get_codes, gen_unique_code
 from scripts.db_link import get_user_data
 from scripts.functions import get_auth_data, login, register_user, get_auth_token, get_user_id_from_token
