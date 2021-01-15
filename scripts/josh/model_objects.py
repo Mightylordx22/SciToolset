@@ -1,6 +1,6 @@
-from scripts.api_functions import *
-from scripts.mission import Mission
-from scripts.scene import Scene
+from scripts.josh.api_functions import *
+from scripts.josh.mission import Mission
+from scripts.josh.scene import Scene
 
 def model_mission_objects():
     all_missions = get_missions()

@@ -5,6 +5,7 @@ class Mission:
         self.takeoff = takeoff
         self.scenes = scenes
 
+
     def get_mission_id(self):
         return self.mission_id
 

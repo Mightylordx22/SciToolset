@@ -7,7 +7,6 @@ host_name = "hallam.sci-toolset.com"
 
 def get_access_token():
     url = 'https://hallam.sci-toolset.com/api/v1/token'
-    print("1")
     payload = 'grant_type=password&username=hallam-d&password=b\P7?Cw#'
 
     headers = {
@@ -16,12 +15,11 @@ def get_access_token():
         'Host': host_name
     }
 
-
-
     response = requests.request("POST", url, auth=("b2166e80-b732-4408-92f1-c53a523f2123",
                                                    "79c0063046539713e1ad99c3a2ab24e2fd787bd37adca581e11cbc951fdac583"),
                                 data=payload, headers=headers, verify=False)
     json_file = response.json()
+
     token = json_file['access_token']
     return token
 
@@ -32,7 +30,7 @@ access_token = get_access_token()
 def return_all_products():
     url = 'https://hallam.sci-toolset.com/discover/api/v1/products/search'
 
-    payload = '{"size":1000, "keywords":""}'
+    payload = '{"size":10, "keywords":""}'
     headers = {
         'Content-Type': "application/json",
         'Authorization': "Bearer " + access_token,
@@ -57,9 +55,10 @@ def retrieve_metadata(product_id):
     }
 
     response = requests.get(url, headers=headers, verify=False)
+
     json_data = json.loads(response.text)
 
-    return("Four-Corner Coordinates: {}".format(jp.match("$.product.result.footprint.coordinates[*]", json_data)))
+    return ("Four-Corner Coordinates: {}".format(jp.match("$.product.result.footprint.coordinates[*]", json_data)))
 
 
 def get_missions():
@@ -73,6 +72,7 @@ def get_missions():
     }
 
     response = requests.request("GET", url, headers=headers, data=payload, verify=False)
+
     json_file = response.json()
     missions = json_file
     return missions
@@ -91,7 +91,6 @@ def get_specified_mission():
     json_file = response.json()
     specified_mission = json_file
     return specified_mission
-
 
 
 def mission_footprint(mission):
@@ -126,6 +125,7 @@ def get_scene_times(scene_id):
     all_times.append(time_data['product']['result']['objectenddate'])
     return all_times
 
+
 def get_scene_coordinates(scene_id):
     url = "https://hallam.sci-toolset.com/discover/api/v1/products/" + scene_id
 
@@ -139,6 +139,7 @@ def get_scene_coordinates(scene_id):
     json_file = response.json()
     coordinates = json_file
     return coordinates['product']['result']['footprint']['coordinates']
+
 
 def get_mission_search_data(mission_name):
     url = "https://hallam.sci-toolset.com/discover/api/v1/missionfeed/missions/search?keyword=" + mission_name
@@ -154,7 +155,8 @@ def get_mission_search_data(mission_name):
     search_data = json_file
     return search_data['results']
 
-def get_scene(mission_id, scene_id):  #  scene name
+
+def get_scene(mission_id, scene_id):  # scene name
     url = "https://hallam.sci-toolset.com/discover/api/v1/missionfeed/missions/" + mission_id + "/scene/" + scene_id + "/frames"
 
     payload = {}
@@ -168,7 +170,8 @@ def get_scene(mission_id, scene_id):  #  scene name
     scene_data = json_file
     return scene_data['scenes'][0]['name']
 
-def get_scene_time(mission_id, scene_id):  #  scene name
+
+def get_scene_time(mission_id, scene_id):  # scene name
     url = "https://hallam.sci-toolset.com/discover/api/v1/missionfeed/missions/" + mission_id + "/scene/" + scene_id + "/frames"
 
     payload = {}
@@ -181,6 +184,7 @@ def get_scene_time(mission_id, scene_id):  #  scene name
     json_file = response.json()
     scene_data = json_file
     return scene_data['scenes'][0]['firstFrameTime']
+
 
 def get_scene_footprint(scene_id):
     url = "https://hallam.sci-toolset.com/discover/api/v1/products/" + scene_id

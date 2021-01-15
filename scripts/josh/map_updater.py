@@ -1,11 +1,8 @@
 import folium
-from scripts.model_objects import total_missions
+from scripts.josh.model_objects import total_missions
 from folium.plugins.timestamped_geo_json import *
 
 
-
-
-total_missions
 
 the_map = folium.Map(location=[51.5074, 0.1278])
 
