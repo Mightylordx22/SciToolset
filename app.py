@@ -4,6 +4,8 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from scripts.functions import get_authenticate_data, login, get_authenticate_token, get_user_id_from_token, register, \
     authenticate_discover_bearer_token, get_user, genarate_unique_code, get_unique_codes
 
+from scripts.map_updater import get_mission_coverage
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
 
@@ -21,6 +23,7 @@ def home_page():
             if valid:
                 if new_token >= 1:
                     authenticate_discover_bearer_token()
+                    get_mission_coverage()
                     return render_template("index.html", is_admin=new_token)
                 else:
                     session.pop('auth_token', None)
