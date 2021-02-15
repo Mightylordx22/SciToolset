@@ -1,11 +1,11 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session
-import urllib3
-urllib3.disable_warnings()
+
 from scripts.functions import get_authenticate_data, login, get_authenticate_token, get_user_id_from_token, register, \
     authenticate_discover_bearer_token, get_user, genarate_unique_code, get_unique_codes
 
-from scripts.josh.map_updater import get_mission_coverage
+from scripts.sci_discover import get_server_data
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
@@ -24,8 +24,8 @@ def home_page():
             if valid:
                 if new_token >= 1:
                     authenticate_discover_bearer_token()
-                    #get_mission_coverage()
-                    return render_template("index.html", is_admin=new_token)
+                    get_server_data()
+                    return render_template("testing.html", is_admin=new_token)
                 else:
                     session.pop('auth_token', None)
     except:

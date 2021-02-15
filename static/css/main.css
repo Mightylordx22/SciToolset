@@ -122,17 +122,19 @@
     height: 100vh;
     margin: 0;
     padding: 0;
-    background-color: dimgray;
 }
 
 .side-menu{
     position: absolute;
-    background: rgba(00, 00, 00, 0.75);
+    backdrop-filter: blur(2px);
+    background: rgba(00, 00, 00, 0.5);
     margin: 10px;
     height: 80%;
-    width: 18% !important;
+    width: 20% ;
 }
-
+.nav-container{
+    justify-content: center;
+}
 
 @media  only screen and  (max-width: 768px) {
     .side-menu{
@@ -140,28 +142,34 @@
     }
 }
 
-@media  only screen and  (max-width: 920px) {
+@media  only screen and  (max-width: 1560px) {
     .side-menu{
-        width: 34% !important;
+        width: 25%;
     }
 }
 
-.col-11{
-    text-align: center;
+@media  only screen and  (max-width: 1300px) {
+    .side-menu {
+        width: 30%;
+    }
 }
+
+@media  only screen and  (max-width: 1040px) {
+    .side-menu{
+        width: 33%;
+    }
+}
+@media  only screen and  (max-width: 950px) {
+    .side-menu{
+        width: 42%;
+    }
+}
+
 
 .col-11{
     background: rgba(76, 175, 80, 0.0);
     position: absolute;
-    margin: 10px;
-}
-
-.h-8{
-    height: 8%;
-}
-
-.h-92{
-    height: 92%;
+    text-align: center;
 }
 
 .nav-link {
@@ -171,4 +179,8 @@
 .nav-link:hover {
     color: white;
     background-color: rgba(51, 170, 51, .4) !important;
+}
+
+.show-me {
+    margin: 3px 10px;
 }
