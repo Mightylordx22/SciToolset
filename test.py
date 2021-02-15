@@ -17,11 +17,10 @@ urls = [f'https://hallam.sci-toolset.com/discover/api/v1/missionfeed/missions/{x
         json.loads(response.text)["missions"]]
 rs = (grequests.get(u, headers=headers, verify=False) for u in urls)
 res = grequests.map(rs)
-urls2 = [f'https://hallam.sci-toolset.com/discover/api/v1/products/{json.loads(x.text)["scenes"][0]["id"]}' for x in res]
+urls2 = [f'https://hallam.sci-toolset.com/discover/api/v1/products/{y["id"]}' for x in res for y in json.loads(x.text)["scenes"]]
 rs = (grequests.get(u, headers=headers, verify=False) for u in urls2)
 res = grequests.map(rs)
-# data = {"data": []}
-# for i in res:
-#     data["data"].append(json.loads(i.text))
-# with open("data2.json", "w") as file:
-#     file.write(json.dumps(data, indent=4))
+data = {"data": []}
+for i in res:
+    data["data"].append(json.loads(i.text))
+

@@ -2,6 +2,7 @@ import json
 import grequests
 import requests
 import urllib3
+
 urllib3.disable_warnings()
 
 from scripts.db_link import check_for_bearer_token, save_bearer_token, use_bearer_token
@@ -51,7 +52,11 @@ def get_server_data():
             json.loads(response.text)["missions"]]
     rs = (grequests.get(u, headers=headers, verify=False) for u in urls)
     res = grequests.map(rs)
-    urls2 = [f'https://hallam.sci-toolset.com/discover/api/v1/products/{json.loads(x.text)["scenes"][0]["id"]}' for x in
-             res]
+    urls2 = [f'https://hallam.sci-toolset.com/discover/api/v1/products/{y["id"]}' for x in res for y in
+             json.loads(x.text)["scenes"]]
     rs = (grequests.get(u, headers=headers, verify=False) for u in urls2)
     res = grequests.map(rs)
+    data = {"data": []}
+    for i in res:
+        data["data"].append(json.loads(i.text))
+    return data
