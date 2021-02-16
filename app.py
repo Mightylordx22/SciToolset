@@ -25,11 +25,11 @@ def home_page():
                 if new_token >= 1:
                     authenticate_discover_bearer_token()
                     data = get_server_data()
-                    return render_template("testing.html", is_admin=new_token, data=data)
+                    return render_template("index.html", is_admin=new_token, data=data)
                 else:
                     session.pop('auth_token', None)
-    except:
-        pass
+    except Exception as e:
+        print(e)
     return redirect(url_for("login_page"))
 
 

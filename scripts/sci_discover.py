@@ -42,7 +42,7 @@ def auth_discover_bearer_token():
 def get_server_data():
     headers = {
         'Content-Type': "application/json",
-        'Authorization': "Bearer cfebb766-4165-4db9-801f-0d5f32f241bf",
+        'Authorization': f"Bearer {check_for_bearer_token()}",
         'Accept': "*/*",
         'Host': "hallam.sci-toolset.com"
     }

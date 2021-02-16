@@ -46,12 +46,10 @@
     };
 
     {% for i in data['data'] %}
-        var mylines = [{{ i['product']['result']['footprint']|tojson}}];
-        L.geoJSON(mylines, {style: myStyle}).addTo(mymap);
+        L.geoJSON([{{ i['product']['result']['footprint']|tojson}}], {style: myStyle}).addTo(mymap);
         var marker = L.marker([{{ i['product']['result']['centre']}}]).addTo(mymap);
-        marker.bindPopup("<b>{{ i['product']['result']['title']}}</b><br>Location: {{ i['product']['result']['centre']}}", {autoPan: false});
+        marker.bindPopup("<b>{{ i['product']['result']['title']}}</b><br>Location: {{ i['product']['result']['centre']}}");
     {% endfor %}
-
 
 </script>
 
