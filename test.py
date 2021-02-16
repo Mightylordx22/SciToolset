@@ -3,14 +3,18 @@ import grequests
 import requests
 import urllib3
 
+from scripts.db_link import check_for_bearer_token
+
 urllib3.disable_warnings()
+
 
 headers = {
     'Content-Type': "application/json",
-    'Authorization': "Bearer cfebb766-4165-4db9-801f-0d5f32f241bf",
+    'Authorization': f"Bearer {check_for_bearer_token()}",
     'Accept': "*/*",
     'Host': "hallam.sci-toolset.com"
 }
+
 url = "https://hallam.sci-toolset.com/discover/api/v1/missionfeed/missions"
 response = requests.get(url, headers=headers, verify=False)
 urls = [f'https://hallam.sci-toolset.com/discover/api/v1/missionfeed/missions/{x["id"]}' for x in

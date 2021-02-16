@@ -8,14 +8,22 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
           integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
           crossorigin=""/>
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
             integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
             crossorigin=""></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 </head>
 <body class="index-body">
 <div class="container-fluid h-100">
-        <div id="mapid"></div>
+    <div id="mapid"></div>
     <div style=" position: relative" class="row h-100">
         <div class="px-0 side-menu">
             <div class="row ml-2 mt-2">
@@ -56,8 +64,7 @@
                             </div>
                         </div>
 
-                        <form class="form-inline my-1 nav-container">
-
+                        <form class="form-inline my-1 nav-container" method="get">
                             <nav class="navbar navbar-dark mx-0 px-0">
                                 <button class="navbar-toggler burger-menu p-1 mr-1" type="button" data-toggle="collapse"
                                         data-target="#navbarToggleExternalContent"
@@ -66,11 +73,9 @@
                                     <span class="navbar-toggler-icon"></span>
                                 </button>
                             </nav>
-
-                            <input class="form-control" type="search" placeholder="Search">
-                            <button class="btn btn-secondary my-1 my-0" type="submit"><i class="fas fa-search"></i>
-                            </button>
+                            <input class="form-control" type="text" placeholder="Search" id="filter">
                         </form>
+                        <div id="testing"></div>
                     </div>
                 </div>
             </div>
@@ -78,18 +83,20 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
 <script>
 
-    var mymap = L.map('mapid', {maxBounds: [[84.85, -177], [-84.85, -177], [-84.85, 177], [84.85, 177]]}).setView([55.67538926998685, -6.017720150557737], 13);
+    var mymap = L.map('mapid', {
+        maxBounds: [
+            [84.85, -177],
+            [-84.85, -177],
+            [-84.85, 177],
+            [84.85, 177]
+        ],
+        zoomControl: false
+    }).setView([55.67538926998685, -6.017720150557737], 13);
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(mymap)
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWlnaHR5bHgiLCJhIjoiY2tsNmVpbmViMDU4ZjJvbnBqNGRiYmZyaSJ9.ddB04ay3KFD5nq0kPmFkWQ', {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         maxZoom: 18,
@@ -99,17 +106,60 @@
         zoomOffset: -1,
         accessToken: 'pk.eyJ1IjoibWlnaHR5bHgiLCJhIjoiY2tsNmVpbmViMDU4ZjJvbnBqNGRiYmZyaSJ9.ddB04ay3KFD5nq0kPmFkWQ'
     }).addTo(mymap)
+    mymap._layersMinZoom = 5;
     var myStyle = {
         "fill": "#ff7800",
         "weight": 5,
         "opacity": 0.65
     };
 
-    {% for i in data['data'] %}
-        L.geoJSON([{{ i['product']['result']['footprint']|tojson}}], {style: myStyle}).addTo(mymap);
-        var marker = L.marker([{{ i['product']['result']['centre']}}]).addTo(mymap);
-        marker.bindPopup("<b>{{ i['product']['result']['title']}}</b><br>Location: {{ i['product']['result']['centre']}}");
-    {% endfor %}
+    var markersLayer = new L.LayerGroup();
+    mymap.addLayer(markersLayer);
+    var places = new Map();
+    var shadows = mymap.createPane('shadows');
+    shadows.style.display = "none";
+    var element = document.getElementById("testing");
+    for (var i = 0; i < {{ datalen }}; i++) {
+        var t = {{ data|tojson }}[i].product.result;
+        var t2 = t.centre.split(",")
+        var para = document.createElement("div");
+        var node = document.createTextNode(t.title);
+        para.classList.add("test")
+        para.appendChild(node);
+        element.appendChild(para);
+        var g =L.geoJSON([t.footprint], {style: myStyle}).addTo(markersLayer);
+        g.eachLayer(function (layer) {
+            layer._path.class += 'geoJSONFeature';
+            layer._path.id = t.title;
+        });
+        var marker = L.marker(t2, {title: t.title, shadowPane: 'shadows'}).addTo(markersLayer);
+        marker.bindPopup(`<b>${i + 1} | ${t.title}</b><br>Location: ${t.centre}`);
+        marker.on('mouseover', function (e) {
+            this.openPopup();
+        });
+        marker.on('mouseout', function (e) {
+            this.closePopup();
+        });
+        places.set(t.title, t2);
+    }
+    L.control.scale().addTo(mymap);
+
+    $("[class^=test]").on("click", (e) => {
+        mymap.panTo(places.get(e.target.innerText));
+    });
+    $("#filter").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#testing .test").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+        $("[class^=leaflet-marker-icon]").filter(function () {
+            $(this).toggle(this.title.toLowerCase().indexOf(value) > -1)
+        });
+        $("[class^=leaflet-interactive]").filter(function () {
+            $(this).toggle(this.id.toLowerCase().indexOf(value) > -1)
+        });
+    });
+
 
 </script>
 </body>

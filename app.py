@@ -1,3 +1,5 @@
+from gevent import monkey
+monkey.patch_all()
 import os
 from flask import Flask, render_template, request, redirect, url_for, session
 
@@ -24,12 +26,12 @@ def home_page():
             if valid:
                 if new_token >= 1:
                     authenticate_discover_bearer_token()
-                    data = get_server_data()
-                    return render_template("index.html", is_admin=new_token, data=data)
+                    data = get_server_data()['data']
+                    return render_template("index.html", is_admin=new_token, data=data, datalen=len(data))
                 else:
                     session.pop('auth_token', None)
-    except Exception as e:
-        print(e)
+    except:
+        pass
     return redirect(url_for("login_page"))
 
 
@@ -99,7 +101,6 @@ def admin_page():
                     if request.method == "POST":
                         is_admin = 1 if request.form.get("is_admin") is not None else 0
                         genarate_unique_code(is_admin)
-                    # auth_discover_bearer_token()
                     user_id = get_user_id_from_token(session["auth_token"])
                     name = get_user(user_id)[2]
                     codes = get_unique_codes()
