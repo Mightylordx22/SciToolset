@@ -1,14 +1,15 @@
+import ciso8601
 from gevent import monkey
+
 monkey.patch_all()
 import os
-import json
+import time
 from flask import Flask, render_template, request, redirect, url_for, session
 
 from scripts.functions import get_authenticate_data, login, get_authenticate_token, get_user_id_from_token, register, \
     authenticate_discover_bearer_token, get_user, genarate_unique_code, get_unique_codes
 
 from scripts.sci_discover import get_server_data
-
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
@@ -20,7 +21,7 @@ def redirect_homepage():
     return redirect(url_for("home_page"))
 
 
-@app.route('/map')
+@app.route('/map', methods=["GET","POST"])
 def home_page():
     try:
         if session["auth_token"]:
@@ -28,13 +29,12 @@ def home_page():
             if valid:
                 if new_token >= 1:
                     authenticate_discover_bearer_token()
-                    if app.config.get("DATA_SIZE") == 0:
-                        data = get_server_data()['data']
-                        app.config["DATA_SIZE"] = len(data)
-                    else:
-                        with open("data2.json", "r") as file:
-                            data = json.loads(file.read())["data"]
-                    return render_template("index.html", is_admin=new_token, data=data, datalen=len(data))
+                    data = get_server_data(0,0)['data']
+                    app.config["DATA_SIZE"] = len(data)
+                    if request.method == "POST":
+                        data = get_server_data(request.form.get("startDate"), request.form.get("endDate"))['data']
+                    return render_template("index.html", is_admin=new_token, data=data,
+                                           datalen=app.config.get("DATA_SIZE"))
                 else:
                     session.pop('auth_token', None)
     except Exception as e:

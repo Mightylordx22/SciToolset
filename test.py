@@ -1,30 +1,11 @@
-import json
-import grequests
-import requests
-import urllib3
 
-from scripts.db_link import check_for_bearer_token
+import time
 
-urllib3.disable_warnings()
+import ciso8601
+
+start = int(str(1593914400000)[:-3])
+
+end = time.mktime(ciso8601.parse_datetime("2021-02-12").timetuple())
 
 
-headers = {
-    'Content-Type': "application/json",
-    'Authorization': f"Bearer {check_for_bearer_token()}",
-    'Accept': "*/*",
-    'Host': "hallam.sci-toolset.com"
-}
-
-url = "https://hallam.sci-toolset.com/discover/api/v1/missionfeed/missions"
-response = requests.get(url, headers=headers, verify=False)
-urls = [f'https://hallam.sci-toolset.com/discover/api/v1/missionfeed/missions/{x["id"]}' for x in
-        json.loads(response.text)["missions"]]
-rs = (grequests.get(u, headers=headers, verify=False) for u in urls)
-res = grequests.map(rs)
-urls2 = [f'https://hallam.sci-toolset.com/discover/api/v1/products/{y["id"]}' for x in res for y in json.loads(x.text)["scenes"]]
-rs = (grequests.get(u, headers=headers, verify=False) for u in urls2)
-res = grequests.map(rs)
-data = {"data": []}
-for i in res:
-    data["data"].append(json.loads(i.text))
-
+print(start > end)

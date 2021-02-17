@@ -213,3 +213,15 @@
     cursor: pointer;
 
 }
+
+.leaflet-popup-content-wrapper {
+    width: 400px;
+}
+
+.leaflet-popup-content-wrapper .leaflet-popup-content {
+
+}
+
+.leaflet-popup-tip-container {
+
+}

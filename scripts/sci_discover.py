@@ -1,9 +1,13 @@
+import datetime
 import json
+
+import ciso8601
 import grequests
 import requests
 import urllib3
 
 urllib3.disable_warnings()
+import time
 
 from scripts.db_link import check_for_bearer_token, save_bearer_token, use_bearer_token
 
@@ -39,7 +43,7 @@ def auth_discover_bearer_token():
         print(e)
 
 
-def get_server_data():
+def get_server_data(date_start, date_end):
     headers = {
         'Content-Type': "application/json",
         'Authorization': f"Bearer {check_for_bearer_token()}",
@@ -57,8 +61,16 @@ def get_server_data():
     rs = (grequests.get(u, headers=headers, verify=False) for u in urls2)
     res = grequests.map(rs)
     data = {"data": []}
-    for i in res:
-        data["data"].append(json.loads(i.text))
-    with open("data2.json", "w") as file:
-        file.write(json.dumps(data))
+    if date_start == 0 and date_end == 0:
+        for i in res:
+            data["data"].append(json.loads(i.text))
+        with open("data2.json", "w") as file:
+            file.write(json.dumps(data))
+    else:
+        for i in res:
+            start = int(str(json.loads(i.text)["product"]["result"]["objectstartdate"])[:-3])
+            end = int(str(json.loads(i.text)["product"]["result"]["objectenddate"])[:-3])
+            if start > time.mktime(ciso8601.parse_datetime(date_start).timetuple()) and end < time.mktime(ciso8601.parse_datetime(date_end).timetuple()):
+                data["data"].append(json.loads(i.text))
+
     return data
