@@ -124,13 +124,15 @@
     padding: 0;
 }
 
-.side-menu {
+#side-menu {
     position: absolute;
     backdrop-filter: blur(2px);
     background: rgba(00, 00, 00, 0.5);
     margin: 10px;
     height: 80%;
     width: 20%;
+    z-index: 10000000;
+
 }
 
 .nav-container {
