@@ -1,9 +1,7 @@
-import ciso8601
 from gevent import monkey
 
 monkey.patch_all()
 import os
-import time
 from flask import Flask, render_template, request, redirect, url_for, session
 
 from scripts.functions import get_authenticate_data, login, get_authenticate_token, get_user_id_from_token, register, \
@@ -30,11 +28,10 @@ def home_page():
                 if new_token >= 1:
                     authenticate_discover_bearer_token()
                     data = get_server_data(0,0)['data']
-                    app.config["DATA_SIZE"] = len(data)
                     if request.method == "POST":
                         data = get_server_data(request.form.get("startDate"), request.form.get("endDate"))['data']
                     return render_template("index.html", is_admin=new_token, data=data,
-                                           datalen=app.config.get("DATA_SIZE"))
+                                           datalen=len(data))
                 else:
                     session.pop('auth_token', None)
     except Exception as e:
