@@ -127,17 +127,21 @@
         para.classList.add("test")
         para.appendChild(node);
         element.appendChild(para);
-        var g =L.geoJSON([t.footprint], {style: myStyle}).addTo(markersLayer);
+        var g = L.geoJSON([t.footprint], {style: myStyle}).addTo(markersLayer);
         g.eachLayer(function (layer) {
             layer._path.class += 'geoJSONFeature';
             layer._path.id = t.title;
         });
-        var marker = L.marker(t2, {title: t.title, shadowPane: 'shadows'}).addTo(markersLayer);
+        var icon = L.icon({
+            iconUrl: '{{ url_for('static', filename='resources/icon.png') }}',
+            iconSize: [32, 32]
+        });
+        var marker = L.marker(t2, {title: t.title, shadowPane: 'shadows', icon:icon}).addTo(markersLayer);
         marker.bindPopup(`<b>${i + 1} | ${t.title}</b><br>Location: ${t.centre}`);
-        marker.on('mouseover', function (e) {
+        marker.on('mouseover', function () {
             this.openPopup();
         });
-        marker.on('mouseout', function (e) {
+        marker.on('mouseout', function () {
             this.closePopup();
         });
         places.set(t.title, t2);

@@ -59,4 +59,6 @@ def get_server_data():
     data = {"data": []}
     for i in res:
         data["data"].append(json.loads(i.text))
+    with open("data2.json", "w") as file:
+        file.write(json.dumps(data))
     return data
