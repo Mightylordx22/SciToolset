@@ -1,11 +1,11 @@
-
-import time
-
-import ciso8601
-
-start = int(str(1593914400000)[:-3])
-
-end = time.mktime(ciso8601.parse_datetime("2021-02-12").timetuple())
+import sqlite3 as sql
 
 
-print(start > end)
+
+conn = sql.connect("database.db")
+cur = conn.cursor()
+
+
+
+cur.execute("INSERT INTO test VALUES ('1','1')")
+

@@ -1,5 +1,4 @@
 from gevent import monkey
-
 monkey.patch_all()
 import os
 from flask import Flask, render_template, request, redirect, url_for, session
@@ -11,7 +10,6 @@ from scripts.sci_discover import get_server_data
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
-app.config["DATA_SIZE"] = 0
 
 
 @app.route('/')
