@@ -65,7 +65,7 @@ def get_server_data(date_start, date_end):
         for i in res:
             data["data"].append(json.loads(i.text))
         with open("data2.json", "w") as file:
-            file.write(json.dumps(data))
+            file.write(json.dumps(data, indent=4))
     else:
         for i in res:
             start = int(str(json.loads(i.text)["product"]["result"]["objectstartdate"])[:-3])

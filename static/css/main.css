@@ -9,7 +9,7 @@
 
 .main-content {
     height: 100vh;
-    background-image: linear-gradient(135deg, #0A547F, #0A7F3F);
+    background-image: linear-gradient(135deg, #000000, #df8f05);
     background-size: 400% 400%;
     animation: gradient 10s ease infinite;
     display: flex;
@@ -196,8 +196,7 @@
 .test {
     width: 90%;
     transition: 0.25s;
-    margin: 0 auto;
-    margin-bottom: 10px !important;
+    margin: 0;
 }
 
 #testing {
@@ -210,7 +209,7 @@
 
 .test:hover {
     transition: 0.25s;
-    background-color: #DF8F05;
+    background-color: #df8f05;
     transform: scale(1.01);
     cursor: pointer;
 
@@ -266,14 +265,34 @@
     overflow-y: scroll;
 }
 
-.scrollbar::-webkit-scrollbar {
-    display: none;
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px darkgray;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #F99B32;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: darkorange;
 }
 
 .cardTest {
-    width: 150px;
-    height: 30px;
-    background: orange;
-    border: 2px solid black;
+    text-align: center;
+    width: 90%;
+    height: 60px;
+    border-radius: 10px;
+    background: #F99B32;
+    padding-top: 5px;
+    margin-bottom: 10px !important;
+    margin-right: auto;
+    margin-left: auto;
+    border: 1px #000 solid;
 }
 

@@ -27,21 +27,26 @@
     <div id="mapid">
         <div class="top-nav">
             <nav style="justify-content: space-around" class="navbar navbar-expand-lg navbar-dark bg-dark">
-                {#                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">#}
-                <ul style="letter-spacing: 2px; " class="navbar-nav ml-auto">
+                <ul style="letter-spacing: 2px;" class="navbar-nav ml-auto">
                     <li>
                         <a class="nav-item nav-link active" href="index.html">Home <span
                                 class="sr-only">(current)</span></a>
                     </li>
                     <li>
-                        <a class="nav-item nav-link" id="open" href="#">Table view</a>
+                        <a class="nav-item nav-link" id="open">Table view</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
                            aria-haspopup="true" aria-expanded="false">Select date</a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#"><input type="date"></a>
-                        </div>
+                        <form method="post">
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                Start Date: <input type="date" name="startDate" required><br>
+                                End Date: <input type="date" name="endDate" required><br>
+                                <button type="submit" class="btn btn-outline-primary centred">
+                                    submit
+                                </button>
+                            </div>
+                        </form>
                     </li>
                     {% if session['auth_token'] %}
                         {% if is_admin == 2 %}
@@ -59,7 +64,6 @@
                     {% endif %}
                 </ul>
 
-                {#                </div>#}
             </nav>
         </div>
 
@@ -70,7 +74,7 @@
 
                         <form class="form-inline my-1 nav-container" method="get"></form>
                         <input class="form-control" type="text" placeholder="Search" id="filter">
-                        <div id="testing" class="m-2 scrollbar">
+                        <div id="testing" class="my-3 mx-0 scrollbar">
 
                         </div>
                     </div>
@@ -109,7 +113,7 @@
                 </tr>
                 </tbody>
             </table>
-            <a href="#" id="close">Close</a>
+            <a id="close">Close</a>
         </div>
     </div>
 </div>
@@ -154,11 +158,23 @@
         var t = {{ data|tojson }}[i].product.result;
         var t2 = t.centre.split(",");
         var para = document.createElement('div');
+        var tag = document.createElement('div');
+        var p = document.createElement('div');
         var node = document.createTextNode(t.title);
+        var node2 = document.createTextNode(new Date(t.objectstartdate).toLocaleString());
+        var node3 = document.createTextNode("Tag");
+        var bold = document.createElement("b");
+        bold.appendChild(node);
+        tag.appendChild(node3);
+        p.appendChild(node2);
         para.classList.add("test");
-        para.id = 'container';
-        para.appendChild(node);
+        para.classList.add('cardTest');
+        para.appendChild(bold);
+        para.appendChild(p);
+        para.appendChild(tag);
         element.appendChild(para);
+
+
         var g = L.geoJSON([t.footprint], {style: myStyle}).addTo(markersLayer);
         g.eachLayer(function (layer) {
             layer._path.class += 'geoJSONFeature';
@@ -179,8 +195,8 @@
         places.set(t.title, t2);
     }
     L.control.scale().addTo(mymap);
-    $("[class^=test]").on("click", (e) => {
-        mymap.panTo(places.get(e.target.innerText));
+    $("div[class^=test]").on("click", (e) => {
+        mymap.setView(places.get(e.currentTarget.innerText.substr(0, 17)), zoom=10);
     });
 
     $("#filter").on("keyup", function () {
@@ -195,7 +211,6 @@
             $(this).toggle(this.id.toLowerCase().indexOf(value) > -1)
         });
     });
-
 
     var div = L.DomUtil.get('side-menu');
     L.DomEvent.on(div, 'mousewheel', L.DomEvent.stopPropagation);
