@@ -32,18 +32,27 @@
 
 .card {
     overflow: hidden;
-    border: 0 !important;
+    border: 2px solid black !important;
     border-radius: 20px !important;
     box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+    background-color: #2f2e2e !important;
+    color: white;
 }
 
 .card-body {
     padding: 1rem;
     font-family: "Comfortaa", sans-serif;
+    border: #2f2e2e;
+    background-color: #2f2e2e;
+}
+
+.card-body img{
+    padding-bottom: 20px;
 }
 
 .form-input {
     position: relative;
+    color: white;
 }
 
 .form-input input {
@@ -71,13 +80,15 @@
 }
 
 .register-link {
+    color: #32F9E1;
     text-decoration: none;
     transition: 0.25s;
 }
 
 .register-link:hover {
     color: #f59324;
-    transition: 0.25s;
+    text-decoration: none;
+    transition: 0.3s;
 }
 
 .error-message {
@@ -86,7 +97,7 @@
 }
 
 .centred {
-    text-align: center;
+    text-align: center !important;
 }
 
 .left {
@@ -94,6 +105,7 @@
 }
 
 .auth-divider {
+    background-color: white;
     width: 100%;
 }
 
@@ -193,21 +205,22 @@
     height: 100vh;
 }
 
-.test {
+.mission {
     width: 90%;
     transition: 0.25s;
     margin: 0;
 }
 
-#testing {
-    display: flex;
+#missionList {
+    display: flex ;
     max-height: 70vh;
     flex-direction: column;
     overflow-y: auto;
     color: #1C1C1C;
+    font-family: "Lucida Console", "Courier New", monospace;
 }
 
-.test:hover {
+.mission:hover {
     transition: 0.25s;
     background-color: #df8f05;
     transform: scale(1.01);
@@ -227,7 +240,7 @@
 
 }
 
-.top-nav {
+.top-nav{
     position: relative;
     z-index: 10000000;
 }
@@ -241,52 +254,49 @@
     transform: translate(-50%, -50%);
     padding: 40px;
     box-shadow: 0 5px 30px rgba(0, 0, 0, .30);
-    background: #ffffff;
+    background: rgba(0, 0, 0, 0.5);
     display: none;
-    transition: 0.5s;
+    backdrop-filter: blur(2px);
+    transition: visibility 0s, opacity 0.5s linear;
     z-index: 10000000;
 }
 
-#popup a {
+.closeTableButton {
     position: absolute;
-    bottom: 5%;
-    background-color: black;
-    color: #df8f05;
-    font-size: medium;
-    text-decoration: none;
-    text-align: center;
-    padding: 10px;
-    width: 60px;
-    height: 45px;
-    border-radius: 8%;
+    top:0;
+    right: 0;
 }
 
-.scrollbar {
+#close {
+    color: darkorange;
+    font-size: 27px;
+}
+
+.scrollbar{
     overflow-y: scroll;
 }
 
 ::-webkit-scrollbar {
-    width: 15px;
+  width: 15px;
 }
 
 ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 5px darkgray;
-    border-radius: 10px;
+  box-shadow: inset 0 0 5px darkgray;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #F99B32;
-    border-radius: 10px;
+  background: #F99B32;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: darkorange;
+  background: darkorange;
 }
 
-.cardTest {
+.mission{
     text-align: center;
     width: 90%;
-    height: 60px;
     border-radius: 10px;
     background: #F99B32;
     padding-top: 5px;
@@ -294,5 +304,22 @@
     margin-right: auto;
     margin-left: auto;
     border: 1px #000 solid;
+
 }
 
+.tableContainer{
+    padding: 5px;
+    height: 100%;
+    width: 100%;
+    margin-top: 10px;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+
+#test {
+    position: relative;
+    font-size: 50px;
+    top: -10px;
+    right: -20px;
+}

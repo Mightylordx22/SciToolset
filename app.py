@@ -1,4 +1,7 @@
 from gevent import monkey
+
+from scripts.db_link import get_tags, add_tag
+
 monkey.patch_all()
 import os
 from flask import Flask, render_template, request, redirect, url_for, session
@@ -25,11 +28,16 @@ def home_page():
             if valid:
                 if new_token >= 1:
                     authenticate_discover_bearer_token()
-                    data = get_server_data(0,0)['data']
                     if request.method == "POST":
                         data = get_server_data(request.form.get("startDate"), request.form.get("endDate"))['data']
+                    else:
+                        data = get_server_data(0, 0)['data']
+                    t = []
+                    for i in data:
+                        t.append(i['product']['id'])
+                    tags = get_tags(t)
                     return render_template("index.html", is_admin=new_token, data=data,
-                                           datalen=len(data))
+                                           datalen=len(data), tags=tags)
                 else:
                     session.pop('auth_token', None)
     except Exception as e:

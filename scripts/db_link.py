@@ -126,7 +126,8 @@ def get_tags(scenes):
     conn, cur = connect_to_database()
     dicTags = {}
     for scene in scenes:
-        dicTags[scene] = cur.execute("SELECT name FROM tags_table WHERE scene_id=?", (scene)).fetchall()
+        dicTags[scene] = [x[0] for x in
+                          cur.execute("SELECT name FROM tags_table WHERE scene_id=?;", (scene,)).fetchall()]
     return dicTags
 
 
@@ -134,7 +135,10 @@ def add_tag(scenes, tag_name):
     try:
         conn, cur = connect_to_database()
         for scene in scenes:
-            cur.execute("INSERT INTO tags_table('scene_id','name') VALUES (?,?) ", (scene, tag_name))
+            try:
+                cur.execute("INSERT INTO tags_table('scene_id','name') VALUES (?,?) ", (scene, tag_name,))
+            except:
+                pass
         conn.commit()
         return True
     except:
@@ -145,7 +149,10 @@ def remove_tags(scenes, tag_name):
     try:
         conn, cur = connect_to_database()
         for scene in scenes:
-            cur.execute(f"DELETE FROM tags_table WHERE name=? AND scene_id=?;", (tag_name, scene))
+            try:
+                cur.execute(f"DELETE FROM tags_table WHERE name=? AND scene_id=?;", (tag_name, scene,))
+            except:
+                pass
         conn.commit()
         return True
     except:

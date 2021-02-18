@@ -73,5 +73,4 @@ def get_server_data(date_start, date_end):
             if start > time.mktime(ciso8601.parse_datetime(date_start).timetuple()) and end < time.mktime(
                     ciso8601.parse_datetime(date_end).timetuple()):
                 data["data"].append(json.loads(i.text))
-
     return data
