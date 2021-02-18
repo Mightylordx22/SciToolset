@@ -67,11 +67,12 @@
     outline: none;
     background: transparent;
     transition: .25s ease-in-out;
+    color: white;
 }
 
 .btn, .btn:hover, .form-input input[type="email"]:focus, .form-input input[type="password"]:focus, .form-input input[type="text"]:focus {
     transform: scalex(1.02);
-    border-color: #0C5131;
+    border-color: #513A0C;
     transition: .25s ease-in-out;
 }
 
