@@ -70,7 +70,8 @@ def get_server_data(date_start, date_end):
         for i in res:
             start = int(str(json.loads(i.text)["product"]["result"]["objectstartdate"])[:-3])
             end = int(str(json.loads(i.text)["product"]["result"]["objectenddate"])[:-3])
-            if start > time.mktime(ciso8601.parse_datetime(date_start).timetuple()) and end < time.mktime(ciso8601.parse_datetime(date_end).timetuple()):
+            if start > time.mktime(ciso8601.parse_datetime(date_start).timetuple()) and end < time.mktime(
+                    ciso8601.parse_datetime(date_end).timetuple()):
                 data["data"].append(json.loads(i.text))
 
     return data

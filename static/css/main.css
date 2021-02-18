@@ -201,7 +201,7 @@
 }
 
 #testing {
-    display: flex ;
+    display: flex;
     max-height: 70vh;
     flex-direction: column;
     overflow-y: auto;
@@ -227,3 +227,53 @@
 .leaflet-popup-tip-container {
 
 }
+
+.top-nav {
+    position: relative;
+    z-index: 10000000;
+}
+
+#popup {
+    position: fixed;
+    top: 50%;
+    left: 60%;
+    width: 70%;
+    height: 70%;
+    transform: translate(-50%, -50%);
+    padding: 40px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, .30);
+    background: #ffffff;
+    display: none;
+    transition: 0.5s;
+    z-index: 10000000;
+}
+
+#popup a {
+    position: absolute;
+    bottom: 5%;
+    background-color: black;
+    color: #df8f05;
+    font-size: medium;
+    text-decoration: none;
+    text-align: center;
+    padding: 10px;
+    width: 60px;
+    height: 45px;
+    border-radius: 8%;
+}
+
+.scrollbar {
+    overflow-y: scroll;
+}
+
+.scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.cardTest {
+    width: 150px;
+    height: 30px;
+    background: orange;
+    border: 2px solid black;
+}
+
