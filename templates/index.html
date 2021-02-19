@@ -1,86 +1,309 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Add Map</title>
+    <title>Homepage</title>
     <meta charset="UTF-8">
     {% include 'includes/links.html' %}
     <script src="https://kit.fontawesome.com/1f77ad60f3.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 </head>
 <body class="index-body">
-<div class="container-fluid h-100">
-    <div style=" position: relative" class="row h-100">
-        <iframe class="col-12 h-100 px-0" src="{{ url_for('static',filename='html/map.html') }}" width="100%"
-                height="100vh" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0">
-        </iframe>
-        <div class="px-0 side-menu">
+
+<div class="container-fluid px-0 mx-0">
+    <div id="mapid">
+        <div class="top-nav">
+            <nav style="justify-content: space-around" class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <a class="navbar-brand pt-0 m-0" id="nav-logo">
+                    <img src="{{ url_for('static',filename='resources/sci-logo.png') }}" alt="" width="59" height="34">
+                </a>
+                <ul style="letter-spacing: 2px;" class="navbar-nav ml-auto">
+                    <li>
+                        <a class="nav-item nav-link active" href="{{ url_for('home_page') }}">Home <span
+                                class="sr-only">(current)</span></a>
+                    </li>
+                    <li>
+                        <a class="nav-item nav-link" id="open">Table view</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Select date</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <form style="padding: 5px" method="post">
+                                <p><b>Start Date</b></p> <input class="dateInput mx-2" type="date" name="startDate"><br>
+                                <p><b>End Date</b></p> <input class="dateInput mx-2" type="date" name="endDate"><br>
+                                <button type="submit" class="btn btn-outline-primary centred submitBtn mx-5">
+                                    submit
+                                </button>
+                            </form>
+                            <button class="btn btn-outline-primary centred submitBtn mx-5"
+                                    onclick="document.location.href='/'">
+                                Reset
+                            </button>
+                        </div>
+                    </li>
+                    {% if session['auth_token'] %}
+                        {% if is_admin == 2 %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('admin_page') }}">Admin</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout_page') }}">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+
+            </nav>
+        </div>
+
+        <div class="px-0" id="side-menu">
             <div class="row ml-2 mt-2">
                 <div class="col-11 m-0 p-0">
                     <div class="pos-f-t">
-                        <div class="collapse" id="navbarToggleExternalContent">
-                            <div class="py-0 px-0">
-                                <ul class="navbar-nav nav-pills gray">
-                                    <li class="nav-item text-white">
-                                        <a class="nav-link" href="#">Videos<span class="sr-only">(current)</span></a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ url_for("table_page") }}">Table view</a>
-                                    </li>
-                                    <li class="nav-item dropright">
-                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
-                                           data-toggle="dropdown"
-                                           aria-haspopup="true" aria-expanded="false">Select date</a>
-                                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                            <a class="dropdown-item" href="#"><input type="date"></a>
-                                        </div>
-                                    </li>
-                                    {% if session['auth_token'] %}
-                                        {% if is_admin == 2 %}
-                                            <li class="nav-item">
-                                                <a class="nav-link" href="{{ url_for('admin_page') }}">Admin</a>
-                                            </li>
-                                        {% endif %}
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ url_for('logout_page') }}">Logout</a>
-                                        </li>
-                                    {% else %}
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
-                                        </li>
-                                    {% endif %}
-                                </ul>
-                            </div>
+
+                        <form class="form-inline my-1 nav-container" method="get"></form>
+                        <input class="form-control" type="text" placeholder="Search" id="filter">
+                        <div id="missionList" class="my-3 mx-0 scrollbar">
+
                         </div>
-
-                        <form class="form-inline my-1">
-
-                            <nav class="navbar navbar-dark mx-0 px-0">
-                                <button class="navbar-toggler burger-menu p-1 mr-1" type="button" data-toggle="collapse"
-                                        data-target="#navbarToggleExternalContent"
-                                        aria-controls="navbarToggleExternalContent" aria-expanded="false"
-                                        aria-label="Toggle navigation">
-                                    <span class="navbar-toggler-icon"></span>
-                                </button>
-                            </nav>
-
-                            <input class="form-control" type="search" placeholder="Search">
-                            <button class="btn btn-secondary my-1 my-0" type="submit"><i class="fas fa-search"></i>
-                            </button>
-                        </form>
                     </div>
+
                 </div>
             </div>
+        </div>
+        <div id="popup">
+            <div class="tableContainer">
+                <form method="POST">
+                    <input class="tagInput" type="text" placeholder="Tag Name" name="tagName">
+                    <button class="mTagBtn" name="tagButton" type="submit" value="add">Add Tag</button>
+                    <button class="mTagBtn" name="tagButton" type="submit" value="remove">Remove Tag</button>
+                    <table class="table table-striped table-dark">
+                        <thead>
+                        <tr>
+                            <th scope="col">Select</th>
+                            <th scope="col">Mission Name</th>
+                            <th scope="col">Scene Name</th>
+                            <th scope="col">Classification</th>
+                            <th scope="col">Start</th>
+                            <th scope="col">End</th>
+                            <th scope="col">Coordinates</th>
+                            <th scope="col">Tags</th>
+                        </tr>
+                        </thead>
+                        <tbody id="dataBody"></tbody>
+                    </table>
+
+                </form>
+            </div>
+            <button id="close" type="button" class="closeTableButton close my-2 mx-4" aria-label="Close">
+                <span aria-hidden="true" id="closeTableButton">&times;</span>
+            </button>
         </div>
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+<script>
+    var mymap = L.map('mapid', {
+        maxBounds: [
+            [84.85, -177],
+            [-84.85, -177],
+            [-84.85, 177],
+            [84.85, 177]
+        ],
+        zoomControl: false
+    }).setView([55.67538926998685, -6.017720150557737], 6);
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(mymap)
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWlnaHR5bHgiLCJhIjoiY2tsNmVpbmViMDU4ZjJvbnBqNGRiYmZyaSJ9.ddB04ay3KFD5nq0kPmFkWQ', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        minZoom: 3,
+        id: 'mapbox/streets-v11',
+        tileSize: 512,
+        zoomOffset: -1,
+        accessToken: 'pk.eyJ1IjoibWlnaHR5bHgiLCJhIjoiY2tsNmVpbmViMDU4ZjJvbnBqNGRiYmZyaSJ9.ddB04ay3KFD5nq0kPmFkWQ'
+    }).addTo(mymap)
+    mymap._layersMinZoom = 5;
+    var myStyle = {
+        "color": "#000",
+        "weight": 2,
+        "fillColor": "#ff8a00",
+        "opacity": 0.65
+    };
+    mymap.doubleClickZoom.disable();
+    var markersLayer = new L.LayerGroup();
+    mymap.addLayer(markersLayer);
+    var places = new Map();
+    var shadows = mymap.createPane('shadows');
+    shadows.style.display = "none";
+    var tagList = {{ tags|tojson }};
+    var tBody = document.getElementById("dataBody");
+    var element = document.getElementById("missionList");
+    for (var i = 0; i < {{ datalen }}; i++) {
+        var t = {{ data|tojson }}[i].product.result;
+        var t2 = t.centre.split(",");
+        var row = document.createElement("tr");
+        var td1 = document.createElement("td");
+        var td2 = document.createElement("td");
+        var td3 = document.createElement("td");
+        var td4 = document.createElement("td");
+        var td5 = document.createElement("td");
+        var td6 = document.createElement("td");
+        var td7 = document.createElement("td");
+        var td8 = document.createElement("td");
+        var select = document.createElement("input");
+        select.type = "checkbox";
+        select.name = "tableCheckBox"
+        select.value = t.identifier;
+        select.classList.add("checked");
+        var mName = document.createTextNode(t.imagery.missionname);
+        var sName = document.createTextNode(t.imagery.taskname);
+        var classification = document.createTextNode(t.security.classification);
+        var startDate = document.createTextNode(new Date(t.objectstartdate).toLocaleString());
+        var startDate2 = document.createTextNode(new Date(t.objectstartdate).toLocaleString());
+        var endDate = document.createTextNode(new Date(t.objectenddate).toLocaleString());
+        var coords = document.createTextNode(t.centre);
+        var userTags = document.createTextNode(tagList[t.identifier].join(", "));
+        td8.appendChild(select)
+        td1.appendChild(mName);
+        td2.appendChild(sName);
+        td3.appendChild(classification);
+        td4.appendChild(startDate);
+        td5.appendChild(endDate);
+        td6.appendChild(coords);
+        td7.appendChild(userTags);
+
+        row.appendChild(td8);
+        row.appendChild(td1);
+        row.appendChild(td2);
+        row.appendChild(td3);
+        row.appendChild(td4);
+        row.appendChild(td5);
+        row.appendChild(td6);
+        row.appendChild(td7);
+        tBody.appendChild(row);
+        var card = document.createElement('div');
+        var date = document.createElement('div');
+        var tag = document.createElement('div');
+        var node = document.createTextNode(t.title);
+        var bold = document.createElement("b");
+        var tags = [];
+        var form = document.createElement("form");
+        form.method = "post";
+        for (var i2 = 0; i2 < tagList[t.identifier].length; i2++) {
+            var button = document.createElement("button");
+            var span = document.createElement("span");
+            button.classList.add("userTag");
+            button.name = "removeTagSideMenuButton";
+            button.value = `${tagList[t.identifier][i2]}|${t.identifier}`;
+            var node3 = document.createTextNode(tagList[t.identifier][i2]);
+            span.appendChild(node3);
+            button.appendChild(span);
+            form.appendChild(button);
+            tags.push(node3.textContent);
+        }
+        tag.appendChild(form);
+        bold.appendChild(node);
+        date.appendChild(startDate2);
+        card.classList.add("mission");
+        tag.classList.add("tagList");
+        card.appendChild(bold);
+        card.appendChild(date);
+        card.appendChild(tag);
+        element.appendChild(card);
+        var g = L.geoJSON([t.footprint], {style: myStyle}).addTo(markersLayer);
+        g.eachLayer(function (layer) {
+            layer._path.class += 'geoJSONFeature';
+            layer._path.id = t.title + tags.join(" ") + startDate2.textContent;
+        });
+        var icon = L.icon({
+            iconUrl: '{{ url_for('static', filename='resources/icon.png') }}',
+            iconSize: [28, 28]
+        });
+        var marker = L.marker(t2, {
+            title: t.title + tags.join(" ") + startDate2.textContent,
+            shadowPane: 'shadows',
+            icon: icon
+        }).addTo(markersLayer);
+        marker.bindPopup(`<b>${t.title}</b><br>Location: ${t.centre}<br>Tags: ${tags.join(", ")}`);
+        marker.on('mouseover', function () {
+            this.openPopup();
+        });
+        marker.on('mouseout', function () {
+            this.closePopup();
+        });
+        places.set(t.title, t2);
+    }
+    L.control.scale().addTo(mymap);
+    $("div[class^=mission]").on("click", (e) => {
+        if (e.currentTarget.classList[0] === "mission") {
+            mymap.setView(places.get(e.currentTarget.innerText.substr(0, 17)), zoom = 10);
+        }
+    });
+    $("div[class^=tagList]").on("click", (e) => {
+        e.stopPropagation();
+    });
+    $("#side-menu, .top-nav, #popup").on("mouseover", (e) => {
+        mymap.dragging.disable();
+    });
+    $("#side-menu, .top-nav, #popup").on("mouseout", (e) => {
+        mymap.dragging.enable();
+    });
+
+    $("#filter").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#missionList .mission").filter(function () {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+        $("[class^=leaflet-marker-icon]").filter(function () {
+            $(this).toggle(this.title.toLowerCase().indexOf(value) > -1)
+        });
+        $("[class^=leaflet-interactive]").filter(function () {
+            $(this).toggle(this.id.toLowerCase().indexOf(value) > -1)
+        });
+    });
+
+    var div = L.DomUtil.get('side-menu');
+    L.DomEvent.on(div, 'mousewheel', L.DomEvent.stopPropagation);
+
+    var div = L.DomUtil.get('popup');
+    L.DomEvent.on(div, 'mousewheel', L.DomEvent.stopPropagation);
+</script>
+<script>
+    const popup = document.getElementById('popup'),
+        open = document.getElementById('open'),
+        close = document.getElementById('close');
+
+    open.addEventListener("click", () => {
+        if (popup.style.display === 'none' || popup.style.display === "") {
+            popup.style.display = 'block';
+        } else {
+            popup.style.display = 'none';
+        }
+    });
+    close.addEventListener("click", () => {
+        popup.style.display = 'none';
+    });
+</script>
 </body>
+<!-- © Copyright Adam Edmunds, Alexander Francicus Julius Hornsby, Savina Lamborn, Emran Hamdu 2021 All rights reserved -->
 </html>

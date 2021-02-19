@@ -115,3 +115,45 @@ def hash_password(password):
 def get_time_now():
     now = datetime.now()
     return int(datetime.timestamp(now))
+
+
+def get_time_now():
+    now = datetime.now()
+    return int(datetime.timestamp(now))
+
+
+def get_tags(scenes):
+    conn, cur = connect_to_database()
+    dicTags = {}
+    for scene in scenes:
+        dicTags[scene] = [x[0] for x in
+                          cur.execute("SELECT name FROM tags_table WHERE scene_id=?;", (scene,)).fetchall()]
+    return dicTags
+
+
+def add_tags(scenes, tag_name):
+    try:
+        conn, cur = connect_to_database()
+        for scene in scenes:
+            try:
+                cur.execute("INSERT INTO tags_table('scene_id','name') VALUES (?,?) ", (scene, tag_name,))
+            except:
+                pass
+        conn.commit()
+        return True
+    except:
+        return False
+
+
+def remove_tags(scenes, tag_name):
+    try:
+        conn, cur = connect_to_database()
+        for scene in scenes:
+            try:
+                cur.execute(f"DELETE FROM tags_table WHERE name=? AND scene_id=?;", (tag_name, scene,))
+            except:
+                pass
+        conn.commit()
+        return True
+    except:
+        return False

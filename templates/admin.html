@@ -31,10 +31,36 @@
     </script>
 </head>
 <body id="index-body">
-{% include 'includes/header.html' %}
+<div class="top-nav">
+    <nav style="justify-content: space-around" class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand pt-0" href="" id="nav-logo">
+            <img src="{{ url_for('static',filename='resources/sci-logo.png') }}" alt="" width="59" height="34">
+        </a>
+        <ul style="letter-spacing: 2px;" class="navbar-nav ml-auto">
+            <li>
+                <a class="nav-item nav-link active" href="{{ url_for("home_page") }}">Home</a>
+            </li>
+            {% if session['auth_token'] %}
+                {% if is_admin == 2 %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('admin_page') }}">Admin</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout_page') }}">Logout</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('login_page') }}">Login</a>
+                </li>
+            {% endif %}
+        </ul>
+
+    </nav>
+</div>
 <main>
     <div class="container ">
-        <h1>Hi There {{ name }}</h1>
+        <h1 class="centred">Hi There {{ name }}</h1>
 
         {% if codes != [] %}
             {% for i in range(codes|length) %}

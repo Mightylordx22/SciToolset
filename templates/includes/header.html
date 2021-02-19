@@ -11,23 +11,10 @@
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav" id="right-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="{{ url_for("home_page") }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for("admin_page") }}">Contact</a>
-                    {# TODO: DON'T KEEP THIS LIKE THIS CHANGE URL FOR #}
-                </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        Projects
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="#">Pokedex</a></li>
-                        <li><a class="dropdown-item" href="#">To do list</a></li>
-                        <li><a class="dropdown-item" href="#">#</a></li>
-                    </ul>
+                    <a class="nav-link" href="{{ url_for("admin_page") }}">Admin</a>
                 </li>
                 {% if session['auth_token'] %}
                     <li class="nav-item">
