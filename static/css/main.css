@@ -269,7 +269,7 @@
 }
 
 #close {
-    color: darkorange;
+    color: #ff8a00;
     font-size: 27px;
 }
 
@@ -287,19 +287,19 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #F99B32;
+    background: #ff8a00;
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: darkorange;
+    background: #ff8a00;
 }
 
 .mission {
     text-align: center;
     width: 90%;
     border-radius: 10px;
-    background: #F99B32;
+    background: #ff8a00;
     padding-top: 5px;
     margin-bottom: 10px !important;
     margin-right: auto;
@@ -330,11 +330,11 @@
     font-family: "Lucida Console", "Courier New", monospace;
     border-color: black !important;
     margin-top: .5rem !important;
-    background-color: #ff7c00 !important;
+    background-color: #ff8a00 !important;
 }
 
 .submitBtn:hover {
-    background-color: #e77a33 !important;
+    background-color: #ff8a00 !important;
     border: 2px solid black !important;
 }
 
@@ -390,4 +390,40 @@ p {
 
 #open:hover, #navbarDropdownMenuLink:hover {
     cursor: pointer;
+}
+
+.tagInput{
+    display: block;
+    width: 200px;
+    height: calc(1.5em + .75rem + 2px);
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    margin-bottom: 5px;
+}
+.tagInput:hover{
+    border: 2px solid #f36e21 !important;
+}
+
+.mTagBtn{
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 3px;
+    height: 25px;
+    font-family: "Lucida Console", "Courier New", monospace;
+    border-radius: .25rem;
+    border: 1px solid black;
+
+}
+.mTagBtn:hover{
+    background-color: #1C1C1C;
+    color: white;
+    border: 1px solid #f36e21 !important;
+    transition: none;
 }
