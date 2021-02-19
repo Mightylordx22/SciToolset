@@ -20,7 +20,7 @@ def redirect_homepage():
     return redirect(url_for("home_page"))
 
 
-@app.route('/map', methods=["GET","POST"])
+@app.route('/map', methods=["GET", "POST"])
 def home_page():
     try:
         if session["auth_token"]:
@@ -29,8 +29,12 @@ def home_page():
                 if new_token >= 1:
                     authenticate_discover_bearer_token()
                     if request.method == "POST":
+                        print(request.form.get("showAllDates"))
                         if request.form.get("startDate") is not None:
                             data = get_server_data(request.form.get("startDate"), request.form.get("endDate"))['data']
+                        elif request.form.get("removeTagSideMenuButton") is not None:
+                            submit_data = request.form.get("removeTagSideMenuButton").split("|")
+                            remove_tags([submit_data[1]], submit_data[0])
                         else:
                             try:
                                 if request.form.getlist("tableCheckBox") != []:
@@ -38,8 +42,8 @@ def home_page():
                                         add_tags(request.form.getlist("tableCheckBox"), request.form.get("tagName"))
                                     else:
                                         remove_tags(request.form.getlist("tableCheckBox"), request.form.get("tagName"))
-                            except:
-                                pass
+                            except Exception as e:
+                                print(e)
                             data = get_server_data(0, 0)['data']
                     else:
                         data = get_server_data(0, 0)['data']
