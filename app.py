@@ -1,6 +1,6 @@
 from gevent import monkey
 
-from scripts.db_link import get_tags, add_tag
+from scripts.db_link import get_tags, add_tags, remove_tags
 
 monkey.patch_all()
 import os
@@ -29,7 +29,18 @@ def home_page():
                 if new_token >= 1:
                     authenticate_discover_bearer_token()
                     if request.method == "POST":
-                        data = get_server_data(request.form.get("startDate"), request.form.get("endDate"))['data']
+                        if request.form.get("startDate") is not None:
+                            data = get_server_data(request.form.get("startDate"), request.form.get("endDate"))['data']
+                        else:
+                            try:
+                                if request.form.getlist("tableCheckBox") != []:
+                                    if request.form.get("tagButton") == "add":
+                                        add_tags(request.form.getlist("tableCheckBox"), request.form.get("tagName"))
+                                    else:
+                                        remove_tags(request.form.getlist("tableCheckBox"), request.form.get("tagName"))
+                            except:
+                                pass
+                            data = get_server_data(0, 0)['data']
                     else:
                         data = get_server_data(0, 0)['data']
                     t = []
@@ -40,8 +51,8 @@ def home_page():
                                            datalen=len(data), tags=tags)
                 else:
                     session.pop('auth_token', None)
-    except Exception as e:
-        print(e)
+    except:
+        pass
     return redirect(url_for("login_page"))
 
 
@@ -90,8 +101,8 @@ def register_page():
                 return render_template("register.html", message=reg)
             else:
                 return redirect(url_for("login_page"))
-    except Exception as e:
-        print(e)
+    except:
+        pass
     return render_template("register.html", message=message)
 
 
@@ -115,8 +126,8 @@ def admin_page():
                     name = get_user(user_id)[2]
                     codes = get_unique_codes()
                     return render_template("admin.html", name=name.capitalize(), codes=codes)
-    except Exception as e:
-        print(e)
+    except:
+        pass
     return render_template('404.html'), 404
 
 

@@ -46,7 +46,7 @@
     background-color: #2f2e2e;
 }
 
-.card-body img{
+.card-body img {
     padding-bottom: 20px;
 }
 
@@ -213,7 +213,7 @@
 }
 
 #missionList {
-    display: flex ;
+    display: flex;
     max-height: 70vh;
     flex-direction: column;
     overflow-y: auto;
@@ -241,7 +241,7 @@
 
 }
 
-.top-nav{
+.top-nav {
     position: relative;
     z-index: 10000000;
 }
@@ -264,7 +264,7 @@
 
 .closeTableButton {
     position: absolute;
-    top:0;
+    top: 0;
     right: 0;
 }
 
@@ -273,29 +273,29 @@
     font-size: 27px;
 }
 
-.scrollbar{
+.scrollbar {
     overflow-y: scroll;
 }
 
 ::-webkit-scrollbar {
-  width: 15px;
+    width: 15px;
 }
 
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px darkgray;
-  border-radius: 10px;
+    box-shadow: inset 0 0 5px darkgray;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #F99B32;
-  border-radius: 10px;
+    background: #F99B32;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: darkorange;
+    background: darkorange;
 }
 
-.mission{
+.mission {
     text-align: center;
     width: 90%;
     border-radius: 10px;
@@ -308,7 +308,7 @@
 
 }
 
-.tableContainer{
+.tableContainer {
     padding: 5px;
     height: 100%;
     width: 100%;
@@ -318,9 +318,42 @@
 }
 
 
-#test {
+#closeTableButton {
     position: relative;
     font-size: 50px;
     top: -10px;
-    right: -20px;
+    right: -15px;
+}
+
+.submitBtn {
+    color: black !important;
+    font-family: "Lucida Console", "Courier New", monospace;
+    border-color: black !important;
+    margin-top: .5rem !important;
+    background-color: #ff7c00 !important;
+}
+
+.submitBtn:hover {
+    background-color: #e77a33 !important;
+    border: 2px solid black !important;
+}
+
+.dropdown-menu {
+    padding: .5rem !important;
+    border-radius: .5rem !important;
+    backdrop-filter: blur(2px);
+    background: rgba(28, 28, 28, 0.7) !important;
+    color: white !important;
+    text-align: center !important;
+    margin-top: .5rem !important;
+}
+
+.dateInput {
+    margin-bottom: 0.5rem;
+}
+
+p {
+    margin-bottom: .5rem !important;
+    letter-spacing: 0;
+    text-align: center !important;
 }

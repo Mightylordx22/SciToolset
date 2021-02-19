@@ -131,7 +131,7 @@ def get_tags(scenes):
     return dicTags
 
 
-def add_tag(scenes, tag_name):
+def add_tags(scenes, tag_name):
     try:
         conn, cur = connect_to_database()
         for scene in scenes:
